@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Security;
+
+use App\Entity\User;
+use Symfony\Component\Security\Core\Exception\AccountExpiredException;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusException;
+use Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+class UserChecker implements UserCheckerInterface
+{
+    public function checkPreAuth(UserInterface $user): void
+    {
+        //validation=false: the user has been rejected by a consultant.
+        if ($user->isActive() === false) {
+            throw new CustomUserMessageAccountStatusException('Le compte est inactif. Connexion impossible à la plateforme.');
+        }
+    }
+
+    public function checkPostAuth(UserInterface $user): void
+    {
+        if (!$user instanceof User) {
+            return;
+        }
+    }
+}
