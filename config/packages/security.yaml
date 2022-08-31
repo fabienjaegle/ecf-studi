@@ -13,9 +13,13 @@ security:
             entity:
                 class: App\Entity\Franchise
                 property: email
+        structure_provider:
+            entity:
+                class: App\Entity\Structure
+                property: email
         all_users:
             chain:
-                providers: [ 'admin_provider', 'franchise_provider' ]
+                providers: [ 'admin_provider', 'franchise_provider', 'structure_provider' ]
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/

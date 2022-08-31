@@ -35,7 +35,7 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Ecf Studi');
+            ->setTitle('API Salle de sport');
     }
 
     public function configureMenuItems(): iterable

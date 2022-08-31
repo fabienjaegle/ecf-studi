@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
+use App\Entity\User;
 use App\Repository\StructureRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StructureRepository::class)]
-class Structure
+class Structure extends User
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -24,9 +25,6 @@ class Structure
 
     #[ORM\Column(length: 100)]
     private ?string $city = null;
-
-    #[ORM\Column]
-    private ?bool $isActive = null;
 
     public function getId(): ?int
     {
@@ -77,18 +75,6 @@ class Structure
     public function setCity(string $city): self
     {
         $this->city = $city;
-
-        return $this;
-    }
-
-    public function isActive(): ?bool
-    {
-        return $this->isActive;
-    }
-
-    public function setIsActive(bool $isActive): self
-    {
-        $this->isActive = $isActive;
 
         return $this;
     }

@@ -17,9 +17,6 @@ class Franchise extends User
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column]
-    private ?bool $isActive = null;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -33,18 +30,6 @@ class Franchise extends User
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function isActive(): ?bool
-    {
-        return $this->isActive;
-    }
-
-    public function setIsActive(bool $isActive): self
-    {
-        $this->isActive = $isActive;
 
         return $this;
     }
