@@ -7,7 +7,7 @@ use App\Repository\StructureRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: StructureRepository::class)]
-class Structure extends User
+class Structure
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -26,6 +26,12 @@ class Structure extends User
     #[ORM\Column(length: 100)]
     private ?string $city = null;
 
+    #[ORM\ManyToOne(inversedBy: 'structures')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Franchise $franchise = null;
+
+    #[ORM\Column]
+    private ?bool $active = true;
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +81,30 @@ class Structure extends User
     public function setCity(string $city): self
     {
         $this->city = $city;
+
+        return $this;
+    }
+
+    public function getFranchise(): ?Franchise
+    {
+        return $this->franchise;
+    }
+
+    public function setFranchise(?Franchise $franchise): self
+    {
+        $this->franchise = $franchise;
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
 
         return $this;
     }
