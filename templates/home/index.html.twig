@@ -15,7 +15,7 @@
 		{% include "navbar.html.twig" %}
 
 		<div class="hero-section">
-			<div class="container">
+			<div class="container pt-4 pb-4">
 				<div class="row">
 					<div class="col-md-12 text-center">
 						<h2 class="title mb-4">
@@ -25,9 +25,12 @@
 				</div>
 				<div class="row">
 					<div class="col-md-12 mx-auto">
-						<div class="bg-faded">
-							<p class="mb-0">Créée depuis 1987, l'association sportive "Vers le sport" encourage les jeunes enfants à pratiquer une activité sportive quelque soit leur niveau.</p>
-							<p class="mt-5">Nous avons un rayonnement nationales mais aussi internationales.</p>
+						<div class="text-center">
+							<p class="mb-0">Après vous être renseigné(e) sur notre réseau, vous souhaitez obtenir plus d’informations et/ou rejoindre notre enseigne.</p>
+							<p class="mt-5">Vous soumettez votre candidature via notre formulaire de contact en ligne. Nous la réceptionnons et vous recontactons dans la semaine qui suit afin d’échanger sur votre projet.</p>
+							<p class="mt-5">
+								<a class="btn btn-success" href="#">Contactez-nous</a>
+							</p>
 						</div>
 					</div>
 				</div>
@@ -38,15 +41,22 @@
 				<div class="row">
 					<div class="col-md-12 text-center">
 						<h2 class="title mb-4">
-							Grandir ensemble
+							Notre histoire
 						</h2>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-6 mx-auto">
-						<div class="bg-faded">
-							<p class="mb-0">Créée depuis 1987, l'association sportive "Vers le sport" encourage les jeunes enfants à pratiquer une activité sportive quelque soit leur niveau.</p>
-							<p class="mt-5">Nous avons un rayonnement nationales mais aussi internationales.</p>
+						<div class="bg-faded mb-4">
+							<p class="mb-0">FJ Fitness franchit la barre des 100 clubs et affirme son leadership sur le coaching personnalisé en France, avec l'ambition d'atteindre les 300 clubs rapidement.</p>
+						</div>
+						<div>
+							<h3>Ce que nous recherchons</h3>
+							<p>Si vous avez une réelle envie d'entreprendre dans un univers dynamique et que vous êtes dotés de solides aptitudes à la gestion, au management et que vous aimez le relationnel avec la clientèle, n'hésitez plus !</p>
+
+							<p>En famille, seul, en couple ou en association, les franchisés FJ Fitness viennent d'horizons très différents.</p>
+
+							<p>Issus ou non des métiers du coaching sportif, si vous pensez être le candidat idéal : contactez-nous !</p>
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -54,22 +64,22 @@
 							<div class="row h-100">
 								<div class="col-6 p-3">
 									<div class="card">
-										<img src="assets/img/slideshow/slide-1.jpg" alt="slide image 1"/>
+										<img src="{{ asset('assets/img/slide/slide-1.jpg') }}" alt="slide image 1"/>
 									</div>
 								</div>
 								<div class="col-6 p-3">
 									<div class="card">
-										<img src="assets/img/slideshow/slide-2.jpg" alt="slide image 2"/>
+										<img src="{{ asset('assets/img/slide/slide-2.jpg') }}" alt="slide image 2"/>
 									</div>
 								</div>
 								<div class="col-6 p-3">
 									<div class="card">
-										<img src="assets/img/slideshow/slide-3.jpg" alt="slide image 3"/>
+										<img src="{{ asset('assets/img/slide/slide-3.jpg') }}" alt="slide image 3"/>
 									</div>
 								</div>
 								<div class="col-6 p-3">
 									<div class="card">
-										<img src="assets/img/slideshow/slide-4.jpg" alt="slide image 4"/>
+										<img src="{{ asset('assets/img/slide/slide-4.jpg') }}" alt="slide image 4"/>
 									</div>
 								</div>
 							</div>
@@ -82,9 +92,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12 text-center">
-						<div class="title mb-4">
-							Suivez nos actions sur les réseaux sociaux
-						</div>
+						<h2 class="title mb-4">Suivez-nous sur les réseaux sociaux</h2>
 					</div>
 				</div>
 				<div class="row">

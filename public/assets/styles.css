@@ -1,4 +1,109 @@
-@import url("https://fonts.googleapis.com/css2?family=Jost:wght@400;600&family=Oswald:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+@font-face {
+    font-family: 'Bahnschrift';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Bahnschrift'), url('fonts/bahnschrift/BAHNSCHRIFT\ 1.TTF') format('ttf');
+}
+
+@font-face {
+    font-family: 'Bahnschrift';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Bahnschrift'), url('fonts/bahnschrift/BAHNSCHRIFT\ 10.ttf') format('tff');
+}
+
+@font-face {
+    font-family: 'Bahnschrift';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Bahnschrift'), url('fonts/bahnschrift/BAHNSCHRIFT\ 11.ttf') format('tff');
+}
+
+@font-face {
+    font-family: 'Bahnschrift';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Bahnschrift'), url('fonts/bahnschrift/BAHNSCHRIFT\ 12.ttf') format('tff');
+}
+
+@font-face {
+    font-family: 'Bahnschrift';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Bahnschrift'), url('fonts/bahnschrift/BAHNSCHRIFT\ 13.ttf') format('tff');
+}
+
+@font-face {
+    font-family: 'Bahnschrift';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Bahnschrift'), url('fonts/bahnschrift/BAHNSCHRIFT\ 14.ttf') format('tff');
+}
+
+@font-face {
+    font-family: 'Bahnschrift';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Bahnschrift'), url('fonts/bahnschrift/BAHNSCHRIFT\ 2.ttf') format('tff');
+}
+
+@font-face {
+    font-family: 'Bahnschrift';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Bahnschrift'), url('fonts/bahnschrift/BAHNSCHRIFT\ 3.ttf') format('tff');
+}
+
+@font-face {
+    font-family: 'Bahnschrift';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Bahnschrift'), url('fonts/bahnschrift/BAHNSCHRIFT\ 4.ttf') format('tff');
+}
+
+@font-face {
+    font-family: 'Bahnschrift';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Bahnschrift'), url('fonts/bahnschrift/BAHNSCHRIFT\ 5.ttf') format('tff');
+}
+
+@font-face {
+    font-family: 'Bahnschrift';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Bahnschrift'), url('fonts/bahnschrift/BAHNSCHRIFT\ 6.ttf') format('tff');
+}
+
+@font-face {
+    font-family: 'Bahnschrift';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Bahnschrift'), url('fonts/bahnschrift/BAHNSCHRIFT\ 7.ttf') format('tff');
+}
+
+@font-face {
+    font-family: 'Bahnschrift';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Bahnschrift'), url('fonts/bahnschrift/BAHNSCHRIFT\ 8.ttf') format('tff');
+}
+
+@font-face {
+    font-family: 'Bahnschrift';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Bahnschrift'), url('fonts/bahnschrift/BAHNSCHRIFT\ 9.ttf') format('tff');
+}
+
+@font-face {
+    font-family: 'Bahnschrift';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Bahnschrift'), url('fonts/bahnschrift/BAHNSCHRIFT.ttf') format('tff');
+}
 
 body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -12,11 +117,69 @@ body {
     padding-bottom: 5rem;
 }
 
-.title {
-    font-family: Oswald, sans-serif;
-    font-size: 3.3em;
+h2,
+h3,
+h4 {
+    font-family: "Bahnschrift";
     font-weight: 600;
-    text-transform: uppercase;
+}
+
+a {
+    color: #89c541;
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #aed77b;
+    text-decoration: none;
+}
+
+.btn-success,
+.btn-outline-success {
+    font-family: 'Bahnschrift', sans-serif;
+    border-color: #89c541;
+}
+
+.btn-success {
+    background-color: #89c541;
+}
+
+.navbar-light .navbar-text a {
+    color: #89c541;
+    font-weight: 400;
+}
+
+.btn-success:hover,
+.btn-outline-success:hover {
+    font-family: 'Bahnschrift', sans-serif;
+    border-color: #aed77b;
+}
+
+.btn-success:hover {
+    background-color: #aed77b;
+}
+
+.btn-outline-success:hover {
+    background-color: transparent;
+}
+
+.navbar-light .navbar-text a:hover {
+    color: #aed77b;
+    font-weight: 400;
+}
+
+.btn-success:focus,
+.btn-outline-success:focus {
+    border-color: #75a22f;
+}
+
+.btn-success:focus {
+    background-color: #75a22f;
+}
+
+.navbar-light .navbar-text a:focus {
+    color: #75a22f;
+    font-weight: 400;
 }
 
 .btn-primary {
@@ -35,7 +198,7 @@ body {
 /* Navigation */
 
 .navbar {
-    font-family: Jost, sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 .navbar .active {
@@ -46,15 +209,15 @@ body {
 
 /* Hero Section */
 .hero-section {
-    background-image: url("img/sport-room.jpg");
+    padding-top: 6.5rem;
+    background-image: url("img/fitness-room.png");
     background-repeat: no-repeat;
     background-attachment: scroll;
     background-position: center center;
     background-size: cover;
-    height: 530px;
     display: flex;
     align-items: center;
-    color: darkslategrey;
+    color: black;
 }
 
 /* End Hero Section */
@@ -115,7 +278,7 @@ footer h4 {
 }
 
 .event-title {
-    font-family: Oswald, sans-serif;
+    font-family: 'Bahnschrift', sans-serif;
     font-size: 1.5em;
 }
 
@@ -134,7 +297,7 @@ footer h4 {
 }
 
 .event-venue {
-    font-family: Jost, sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 14px;
     color: #999;
 }
