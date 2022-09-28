@@ -1,0 +1,14 @@
+{% extends 'admin.html.twig' %}
+
+{% block pagetitle %}Nouvelle structure
+{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+		<a href="{{ path('app_dashboard_structure_index') }}" role="button" class="btn btn-outline-success mt-3">Retour à la liste</a>
+		<div class="m-5">
+			{{ include('structure/_create_form.html.twig') }}
+		</div>
+	</div>
+{% endblock %}

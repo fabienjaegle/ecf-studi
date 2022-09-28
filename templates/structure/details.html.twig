@@ -1,0 +1,50 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+	<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+		<h2>Détails de la structure :
+			{{ structure.name }}</h2>
+		<div class="btn-toolbar mb-2 mb-md-0">
+			<div class="d-flex">
+				<a href="{{ path('app_dashboard_structure_index') }}" class="btn btn-outline-success">Retour à la liste</a>
+				<a href="{{ path('app_dashboard_edit_structure', {'id': structure.id}) }}" class="btn btn-outline-primary">Modifier</a>
+				{{ include('structure/_delete_form.html.twig') }}
+			</div>
+		</div>
+	</div>
+
+	<div class="m-5">
+		<table class="table table-hover table-striped">
+			<tbody>
+				<tr>
+					<th>Id</th>
+					<td>{{ structure.id }}</td>
+				</tr>
+				<tr>
+					<th>Nom de la structure</th>
+					<td>{{ structure.name }}</td>
+				</tr>
+				<tr>
+					<th>Adresse</th>
+					<td>{{ structure.address }}</td>
+				</tr>
+				<tr>
+					<th>Code postal</th>
+					<td>{{ structure.zipcode }}</td>
+				</tr>
+				<tr>
+					<th>Ville</th>
+					<td>{{ structure.city }}</td>
+				</tr>
+				<tr>
+					<th>Adresse mail</th>
+					<td>{{ structure.email }}</td>
+				</tr>
+				<tr>
+					<th>Est actif ?</th>
+					<td>{{ structure.active ? 'Oui' : 'Non' }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+{% endblock %}

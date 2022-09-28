@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FranchiseDashboardController extends AbstractController
 {
-    #[Route('/dashboard/admin/franchise/index', name: 'app_dashboard_admin_franchise_index')]
+    #[Route('/dashboard/franchise/index', name: 'app_dashboard_franchise_index')]
     public function index(FranchiseRepository $franchiseRepository): Response
     {
         return $this->render('franchise/index.html.twig', [
@@ -23,7 +23,7 @@ class FranchiseDashboardController extends AbstractController
         ]);
     }
 
-    #[Route('/dashboard/admin/franchise/new', name: 'app_dashboard_admin_new_franchise', methods: ['GET', 'POST'])]
+    #[Route('/dashboard/franchise/new', name: 'app_dashboard_new_franchise', methods: ['GET', 'POST'])]
     public function new(Request $request, FranchiseRepository $franchiseRepository, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $franchise = new Franchise();
@@ -46,7 +46,7 @@ class FranchiseDashboardController extends AbstractController
             $entityManager->persist($franchise);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_dashboard_admin_franchise_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_dashboard_franchise_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('franchise/new.html.twig', [
@@ -55,7 +55,7 @@ class FranchiseDashboardController extends AbstractController
         ]);
     }
 
-    #[Route('/dashboard/admin/franchise/{id}', name: 'app_dashboard_admin_franchise_details', methods: ['GET'], requirements: ['id' => '\d+'])]
+    #[Route('/dashboard/franchise/{id}', name: 'app_dashboard_franchise_details', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(FranchiseRepository $franchiseRepository, int $id): Response
     {
         $franchise = $franchiseRepository->find($id);
@@ -65,7 +65,7 @@ class FranchiseDashboardController extends AbstractController
         ]);
     }
 
-    #[Route('/dashboard/admin/franchise/{id}/edit', name: 'app_dashboard_admin_edit_franchise', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
+    #[Route('/dashboard/franchise/{id}/edit', name: 'app_dashboard_edit_franchise', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function edit(Request $request, int $id, FranchiseRepository $franchiseRepository): Response
     {
         $franchise = $franchiseRepository->find($id);
@@ -76,7 +76,7 @@ class FranchiseDashboardController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $franchiseRepository->add($franchise, true);
 
-            return $this->redirectToRoute('app_dashboard_admin_franchise_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_dashboard_franchise_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('franchise/edit.html.twig', [
@@ -85,13 +85,13 @@ class FranchiseDashboardController extends AbstractController
         ]);
     }
 
-    #[Route('/dashboard/admin/franchise/{id}', name: 'app_dashboard_admin_delete_franchise', methods: ['POST'])]
+    #[Route('/dashboard/franchise/{id}', name: 'app_dashboard_delete_franchise', methods: ['POST'])]
     public function delete(Request $request, Franchise $franchise, FranchiseRepository $franchiseRepository): Response
     {
         if ($this->isCsrfTokenValid('delete' . $franchise->getId(), $request->request->get('_token'))) {
             $franchiseRepository->remove($franchise, true);
         }
 
-        return $this->redirectToRoute('app_dashboard_admin_franchise_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_dashboard_franchise_index', [], Response::HTTP_SEE_OTHER);
     }
 }

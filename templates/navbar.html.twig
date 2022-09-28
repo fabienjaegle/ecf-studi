@@ -4,54 +4,47 @@
 			<p class="text-center">Bonjour,&nbsp;{{ app.user.name }}</p>
 		{% endif %}
 		<ul class="nav flex-column">
-			<li class="nav-item">
-				{% if "ROLE_ADMIN" in app.user.roles %}
+
+			{% if "ROLE_ADMIN" in app.user.roles %}
+				<li class="nav-item">
 					<a class="nav-link {% if app.request.get('_route') == 'app_dashboard_admin_index' %}active{% endif %}" aria-current="page" href="{{ path('app_dashboard_admin_index') }}">
 						<span data-feather="home" class="align-text-bottom"></span>
 						Tableau de bord
 					</a>
-				{% elseif "ROLE_FRANCHISE" in app.user.roles %}
+				</li>
+				<li class="nav-item">
+					<a class="nav-link {% if app.request.get('_route') == 'app_dashboard_franchise_index' %}active{% endif %}" aria-current="page" href="{{ path('app_dashboard_franchise_index') }}">
+						<span data-feather="file" class="align-text-bottom"></span>
+						Franchises
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link {% if app.request.get('_route') == 'app_dashboard_structure_index' %}active{% endif %}" aria-current="page" href="{{ path('app_dashboard_structure_index') }}">
+						<span data-feather="shopping-cart" class="align-text-bottom"></span>
+						Structures
+					</a>
+				</li>
+			{% elseif "ROLE_FRANCHISE" in app.user.roles %}
+				<li class="nav-item">
+					<a class="nav-link {% if app.request.get('_route') == 'app_dashboard_franchise_index' %}active{% endif %}" aria-current="page" href="{{ path('app_dashboard_franchise_index') }}">
+						<span data-feather="home" class="align-text-bottom"></span>
+						Tableau de bord
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link {% if app.request.get('_route') == 'app_dashboard_structure_index' %}active{% endif %}" aria-current="page" href="{{ path('app_dashboard_structure_index') }}">
+						<span data-feather="shopping-cart" class="align-text-bottom"></span>
+						Structures
+					</a>
+				</li>
+			{% elseif "ROLE_STRUCTURE" in app.user.roles %}
+				<li class="nav-item">
 					<a class="nav-link active" aria-current="page" href="#">
 						<span data-feather="home" class="align-text-bottom"></span>
 						Tableau de bord
 					</a>
-				{% elseif "ROLE_STRUCTURE" in app.user.roles %}
-					<a class="nav-link active" aria-current="page" href="#">
-						<span data-feather="home" class="align-text-bottom"></span>
-						Tableau de bord
-					</a>
-				{% endif %}
-			</li>
-			<li class="nav-item">
-				<a class="nav-link {% if app.request.get('_route') == 'app_dashboard_admin_franchise_index' %}active{% endif %}" href="{{ path('app_dashboard_admin_franchise_index') }}">
-					<span data-feather="file" class="align-text-bottom"></span>
-					Franchises
-				</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">
-					<span data-feather="shopping-cart" class="align-text-bottom"></span>
-					Structures
-				</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">
-					<span data-feather="users" class="align-text-bottom"></span>
-					Customers
-				</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">
-					<span data-feather="bar-chart-2" class="align-text-bottom"></span>
-					Reports
-				</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#">
-					<span data-feather="layers" class="align-text-bottom"></span>
-					Integrations
-				</a>
-			</li>
+				</li>
+			{% endif %}
 		</ul>
 	</div>
 </nav>

@@ -6,8 +6,8 @@
 			{{ franchise.name }}</h2>
 		<div class="btn-toolbar mb-2 mb-md-0">
 			<div class="d-flex">
-				<a href="{{ path('app_dashboard_admin_franchise_index') }}" class="btn btn-outline-success">Retour à la liste</a>
-				<a href="{{ path('app_dashboard_admin_edit_franchise', {'id': franchise.id}) }}" class="btn btn-outline-primary">Modifier</a>
+				<a href="{{ path('app_dashboard_franchise_index') }}" class="btn btn-outline-success">Retour à la liste</a>
+				<a href="{{ path('app_dashboard_edit_franchise', {'id': franchise.id}) }}" class="btn btn-outline-primary">Modifier</a>
 				{{ include('franchise/_delete_form.html.twig') }}
 			</div>
 		</div>
