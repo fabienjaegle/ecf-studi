@@ -44,14 +44,6 @@
 		{{ form_widget(form.password) }}
 	</div>
 	<div class="col-12">
-		{{ form_label(form.is_active, 'Est actif ?', {'label_attr': {'class': 'form-label'}}) }}
-		{{ form_widget(form.is_active) }}
-
-		<div class="invalid-feedback">
-			{{ form_errors(form.is_active) }}
-		</div>
-	</div>
-	<div class="col-12">
 		{{ form_label(form.franchise, 'Franchise', {'label_attr': {'class': 'form-label'}}) }}
 		{{ form_widget(form.franchise) }}
 
