@@ -23,10 +23,8 @@ class Structure extends User
     private ?ApiClientsGrants $branch = null;
 
     #[ORM\ManyToOne(inversedBy: 'structures')]
+    #[ORM\JoinColumn(onDelete: 'cascade')]
     private ?Franchise $franchise = null;
-
-    #[ORM\Column]
-    private array $roles = ['ROLE_STRUCTURE'];
 
     public function getAddress(): ?string
     {

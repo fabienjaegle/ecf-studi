@@ -44,9 +44,9 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/admin, roles: 'ROLE_ADMIN' }
-        - { path: ^/franchise, roles: 'ROLE_FRANCHISE' }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/dashboard/admin, roles: ROLE_ADMIN }
+        - { path: ^/dashboard/franchise, roles: 'ROLE_FRANCHISE' }
+        - { path: ^/dashboard/structure, roles: ROLE_STRUCTURE }
     
     role_hierarchy:
         ROLE_STRUCTURE: ROLE_USER

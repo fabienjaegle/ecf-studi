@@ -14,9 +14,6 @@ class Franchise extends User
     #[ORM\OneToMany(mappedBy: 'franchise', targetEntity: Structure::class)]
     private Collection $structures;
 
-    #[ORM\Column]
-    private array $roles = ['ROLE_FRANCHISE'];
-
     public function __construct()
     {
         $this->structures = new ArrayCollection();
