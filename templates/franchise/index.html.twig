@@ -28,8 +28,8 @@
 						<td>{{ franchise.email }}</td>
 						<td>{{ franchise.active ? 'Oui' : 'Non' }}</td>
 						<td>
-							<a href="#">Détail</a>
-							<a href="#">Modifier</a>
+							<a href="{{ path('app_dashboard_admin_franchise_details', {'id': franchise.id}) }}">Détails</a>
+							<a href="{{ path('app_dashboard_admin_edit_franchise', {'id': franchise.id}) }}">Modifier</a>
 						</td>
 					</tr>
 				{% else %}

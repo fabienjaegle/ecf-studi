@@ -3,6 +3,7 @@
 namespace App\Controller\Franchise;
 
 use App\Entity\Franchise;
+use App\Form\FranchiseEditType;
 use App\Form\FranchiseType;
 use App\Repository\FranchiseRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -45,12 +46,52 @@ class FranchiseDashboardController extends AbstractController
             $entityManager->persist($franchise);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_dashboard_admin_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_dashboard_admin_franchise_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('franchise/new-franchise.html.twig', [
+        return $this->renderForm('franchise/new.html.twig', [
             'franchise' => $franchise,
             'form' => $form,
         ]);
+    }
+
+    #[Route('/dashboard/admin/franchise/{id}', name: 'app_dashboard_admin_franchise_details', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function show(FranchiseRepository $franchiseRepository, int $id): Response
+    {
+        $franchise = $franchiseRepository->find($id);
+
+        return $this->render('franchise/details.html.twig', [
+            'franchise' => $franchise,
+        ]);
+    }
+
+    #[Route('/dashboard/admin/franchise/{id}/edit', name: 'app_dashboard_admin_edit_franchise', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
+    public function edit(Request $request, int $id, FranchiseRepository $franchiseRepository): Response
+    {
+        $franchise = $franchiseRepository->find($id);
+
+        $form = $this->createForm(FranchiseEditType::class, $franchise);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $franchiseRepository->add($franchise, true);
+
+            return $this->redirectToRoute('app_dashboard_admin_franchise_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('franchise/edit.html.twig', [
+            'franchise' => $franchise,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/dashboard/admin/franchise/{id}', name: 'app_dashboard_admin_delete_franchise', methods: ['POST'])]
+    public function delete(Request $request, Franchise $franchise, FranchiseRepository $franchiseRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $franchise->getId(), $request->request->get('_token'))) {
+            $franchiseRepository->remove($franchise, true);
+        }
+
+        return $this->redirectToRoute('app_dashboard_admin_franchise_index', [], Response::HTTP_SEE_OTHER);
     }
 }
