@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Franchise;
 
-use App\Entity\Franchise;
 use App\Entity\Structure;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -13,11 +12,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
 {
-    #[Route('/admin', name: 'app_admin')]
+    #[Route('/franchise', name: 'app_franchise')]
     public function index(): Response
     {
         $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-        return $this->redirect($adminUrlGenerator->setController(FranchiseCrudController::class)->generateUrl());
+        return $this->redirect($adminUrlGenerator->setController(StructureCrudController::class)->generateUrl());
     }
 
     public function configureDashboard(): Dashboard
@@ -30,7 +29,6 @@ class DashboardController extends AbstractDashboardController
     {
         return [
             MenuItem::linkToDashboard('Dashboard', 'fa fa-home'),
-            MenuItem::linkToCrud('Franchises', 'fa fa-house-circle-check', Franchise::class),
             MenuItem::linkToCrud('Structures', 'fa fa-folder-tree', Structure::class),
         ];
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);

@@ -36,6 +36,9 @@ class ApiClientsGrants
     #[ORM\OneToMany(mappedBy: 'client_id', targetEntity: ApiInstallPerm::class, orphanRemoval: true)]
     private Collection $apiInstallPerms;
 
+    #[ORM\OneToOne(mappedBy: 'branch_id', cascade: ['persist', 'remove'])]
+    private ?Structure $structure = null;
+
     public function __construct()
     {
         $this->apiInstallPerms = new ArrayCollection();
@@ -132,6 +135,23 @@ class ApiClientsGrants
                 $apiInstallPerm->setClientId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStructure(): ?Structure
+    {
+        return $this->structure;
+    }
+
+    public function setStructure(Structure $structure): self
+    {
+        // set the owning side of the relation if necessary
+        if ($structure->getBranchId() !== $this) {
+            $structure->setBranchId($this);
+        }
+
+        $this->structure = $structure;
 
         return $this;
     }
