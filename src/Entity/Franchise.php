@@ -14,6 +14,9 @@ class Franchise extends User
     #[ORM\OneToMany(mappedBy: 'franchise', targetEntity: Structure::class)]
     private Collection $structures;
 
+    #[ORM\ManyToOne(inversedBy: 'franchises')]
+    private ?Admin $domain = null;
+
     public function __construct()
     {
         $this->structures = new ArrayCollection();
@@ -45,6 +48,18 @@ class Franchise extends User
                 $structure->setFranchise(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDomain(): ?Admin
+    {
+        return $this->domain;
+    }
+
+    public function setDomain(?Admin $domain): self
+    {
+        $this->domain = $domain;
 
         return $this;
     }

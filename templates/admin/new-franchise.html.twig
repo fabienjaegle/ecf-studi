@@ -1,0 +1,37 @@
+{% extends 'admin.html.twig' %}
+
+{% block pagetitle %}Nouvelle franchise
+{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+		<div class="m-5">
+			{{ form_start(form) }}
+			<div class="row g-3">
+				<div class="col-12">
+					{{ form_label(form.name, 'Nom de la franchise', {'label_attr': {'class': 'form-label'}}) }}
+					{{ form_widget(form.name) }}
+
+					<div class="invalid-feedback">
+						{{ form_errors(form.name) }}
+					</div>
+				</div>
+				<div class="col-12">
+					{{ form_label(form.email, 'Adresse mail', {'label_attr': {'class': 'form-label'}}) }}
+					{{ form_widget(form.email) }}
+
+					<div class="invalid-feedback">
+						{{ form_errors(form.email) }}
+					</div>
+				</div>
+				<div class="col-12">
+					{{ form_widget(form.password) }}
+				</div>
+
+				<button class="btn btn-outline-primary ml-5 mt-2">Créer</button>
+			</div>
+			{{ form_end(form) }}
+		</div>
+	</div>
+{% endblock %}

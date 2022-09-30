@@ -2,12 +2,7 @@
 
 {% block body %}
 	<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-		<h2>Liste des franchises</h2>
-		<div class="btn-toolbar mb-2 mb-md-0">
-			<div class="btn-group me-2">
-				<a href="{{ path('app_dashboard_new_franchise') }}" class="btn btn-outline-primary">Nouvelle franchise</a>
-			</div>
-		</div>
+		<h2>Liste des franchises actives</h2>
 	</div>
 	<div class="table-responsive">
 		<table class="table table-striped table-sm">
@@ -21,14 +16,14 @@
 				</tr>
 			</thead>
 			<tbody>
-				{% for franchise in franchises %}
+				{% for franchise in active_franchises %}
 					<tr>
 						<td>{{ franchise.id }}</td>
 						<td>{{ franchise.name }}</td>
 						<td>{{ franchise.email }}</td>
 						<td>{{ franchise.active ? 'Oui' : 'Non' }}</td>
 						<td>
-							<a href="{{ path('app_dashboard_franchise_details', {'id': franchise.id}) }}">Détails</a>
+							<a href="{{ path('app_dashboard_admin_franchise_details', {'id': franchise.id}) }}">Détails</a>
 							<a href="{{ path('app_dashboard_edit_franchise', {'id': franchise.id}) }}">Modifier</a>
 						</td>
 					</tr>

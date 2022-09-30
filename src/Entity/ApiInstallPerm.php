@@ -21,8 +21,8 @@ class ApiInstallPerm
     private ?int $install_id = null;
 
     #[ORM\ManyToOne(inversedBy: 'apiInstallPerms')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?ApiClientsGrants $client_id = null;
+    #[ORM\JoinColumn(nullable: false, onDelete: 'cascade')]
+    private ?ApiClientsGrants $client = null;
 
     #[ORM\Column]
     private ?bool $members_read = null;
@@ -83,14 +83,14 @@ class ApiInstallPerm
         return $this;
     }
 
-    public function getClientId(): ?string
+    public function getClientGrants(): ?ApiClientsGrants
     {
-        return $this->client_id;
+        return $this->client;
     }
 
-    public function setClientId(string $client_id): self
+    public function setClientGrants(ApiClientsGrants $client): self
     {
-        $this->client_id = $client_id;
+        $this->client = $client;
 
         return $this;
     }

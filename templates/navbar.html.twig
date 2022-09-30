@@ -1,50 +1,37 @@
-<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-	<div class="position-sticky pt-3 sidebar-sticky">
-		{% if app.user %}
-			<p class="text-center">Bonjour,&nbsp;{{ app.user.name }}</p>
-		{% endif %}
-		<ul class="nav flex-column">
-
-			{% if "ROLE_ADMIN" in app.user.roles %}
-				<li class="nav-item">
-					<a class="nav-link {% if app.request.get('_route') == 'app_dashboard_admin_index' %}active{% endif %}" aria-current="page" href="{{ path('app_dashboard_admin_index') }}">
-						<span data-feather="home" class="align-text-bottom"></span>
-						Tableau de bord
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link {% if app.request.get('_route') == 'app_dashboard_franchise_index' %}active{% endif %}" aria-current="page" href="{{ path('app_dashboard_franchise_index') }}">
-						<span data-feather="file" class="align-text-bottom"></span>
-						Franchises
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link {% if app.request.get('_route') == 'app_dashboard_structure_index' %}active{% endif %}" aria-current="page" href="{{ path('app_dashboard_structure_index') }}">
-						<span data-feather="shopping-cart" class="align-text-bottom"></span>
-						Structures
-					</a>
-				</li>
-			{% elseif "ROLE_FRANCHISE" in app.user.roles %}
-				<li class="nav-item">
-					<a class="nav-link {% if app.request.get('_route') == 'app_dashboard_franchise_index' %}active{% endif %}" aria-current="page" href="{{ path('app_dashboard_franchise_index') }}">
-						<span data-feather="home" class="align-text-bottom"></span>
-						Tableau de bord
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link {% if app.request.get('_route') == 'app_dashboard_structure_index' %}active{% endif %}" aria-current="page" href="{{ path('app_dashboard_structure_index') }}">
-						<span data-feather="shopping-cart" class="align-text-bottom"></span>
-						Structures
-					</a>
-				</li>
-			{% elseif "ROLE_STRUCTURE" in app.user.roles %}
-				<li class="nav-item">
-					<a class="nav-link active" aria-current="page" href="#">
-						<span data-feather="home" class="align-text-bottom"></span>
-						Tableau de bord
-					</a>
-				</li>
-			{% endif %}
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+	<div class="position-sticky pt-3 sidebar-sticky d-flex flex-column flex-shrink-0 p-3 text-bg-dark">
+		<ul class="nav nav-pills flex-column mb-auto">
+			<li class="nav-item">
+				<a href="{{ path('app_dashboard_admin_index') }}" class="nav-link {% if app.request.get('_route') == 'app_dashboard_admin_index' %}active{% endif %}" aria-current="page">
+					<i class="fa fa-home"></i>
+					Tableau de bord
+				</a>
+			</li>
+			<li class="nav-item mt-1 mb-1">
+				<a href="#" class="btn btn-toggle d-inline-flex align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#franchise-collapse" aria-expanded="false">
+					Franchises
+				</a>
+				<div class="collapse" id="franchise-collapse">
+					<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+						<li>
+							<a href="{{ path('app_dashboard_admin_new_franchise') }}" class="link-light d-inline-flex text-decoration-none">Nouvelle franchise</a>
+						</li>
+						<li>
+							<a href="{{ path('app_dashboard_admin_active_franchises') }}" class="link-light d-inline-flex text-decoration-none">Franchises actives</a>
+						</li>
+						<li>
+							<a href="{{ path('app_dashboard_admin_inactive_franchises') }}" class="link-light d-inline-flex text-decoration-none">Franchises inactives</a>
+						</li>
+					</ul>
+				</div>
+			</li>
 		</ul>
+		{% if app.user %}
+			<hr>
+			<div>
+				<i width="32" height="32" class="fa fa-user rounded-circle me-2"></i>
+				<strong>{{ app.user.name }}</strong>
+			</div>
+		{% endif %}
 	</div>
 </nav>

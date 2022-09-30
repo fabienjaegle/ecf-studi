@@ -18,10 +18,6 @@ class Structure extends User
     #[ORM\Column(length: 100)]
     private ?string $city = null;
 
-    #[ORM\OneToOne(inversedBy: 'structure', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?ApiClientsGrants $branch = null;
-
     #[ORM\ManyToOne(inversedBy: 'structures')]
     #[ORM\JoinColumn(onDelete: 'cascade')]
     private ?Franchise $franchise = null;
@@ -58,18 +54,6 @@ class Structure extends User
     public function setCity(string $city): self
     {
         $this->city = $city;
-
-        return $this;
-    }
-
-    public function getBranchId(): ?ApiClientsGrants
-    {
-        return $this->branch;
-    }
-
-    public function setBranchId(ApiClientsGrants $branch): self
-    {
-        $this->branch = $branch;
 
         return $this;
     }

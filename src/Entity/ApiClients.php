@@ -193,8 +193,8 @@ class ApiClients
     public function setApiClientsGrants(ApiClientsGrants $apiClientsGrants): self
     {
         // set the owning side of the relation if necessary
-        if ($apiClientsGrants->getClientId() !== $this) {
-            $apiClientsGrants->setClientId($this);
+        if ($apiClientsGrants->getClient() !== $this) {
+            $apiClientsGrants->setClient($this);
         }
 
         $this->apiClientsGrants = $apiClientsGrants;

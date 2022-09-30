@@ -31,13 +31,10 @@ class ApiClientsGrants
 
     #[ORM\OneToOne(inversedBy: 'apiClientsGrants', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?ApiClients $client_id = null;
+    private ?ApiClients $client = null;
 
     #[ORM\OneToMany(mappedBy: 'client_id', targetEntity: ApiInstallPerm::class, orphanRemoval: true)]
     private Collection $apiInstallPerms;
-
-    #[ORM\OneToOne(mappedBy: 'branch_id', cascade: ['persist', 'remove'])]
-    private ?Structure $structure = null;
 
     public function __construct()
     {
@@ -49,14 +46,14 @@ class ApiClientsGrants
         return $this->id;
     }
 
-    public function getClientId(): ?string
+    public function getClient(): ?ApiClients
     {
-        return $this->client_id;
+        return $this->client;
     }
 
-    public function setClientId(string $client_id): self
+    public function setClient(ApiClients $client): self
     {
-        $this->client_id = $client_id;
+        $this->client = $client;
 
         return $this;
     }
@@ -121,7 +118,7 @@ class ApiClientsGrants
     {
         if (!$this->apiInstallPerms->contains($apiInstallPerm)) {
             $this->apiInstallPerms->add($apiInstallPerm);
-            $apiInstallPerm->setClientId($this);
+            $apiInstallPerm->setClientGrants($this);
         }
 
         return $this;
@@ -131,27 +128,10 @@ class ApiClientsGrants
     {
         if ($this->apiInstallPerms->removeElement($apiInstallPerm)) {
             // set the owning side to null (unless already changed)
-            if ($apiInstallPerm->getClientId() === $this) {
-                $apiInstallPerm->setClientId(null);
+            if ($apiInstallPerm->getClientGrants() === $this) {
+                $apiInstallPerm->setClientGrants(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getStructure(): ?Structure
-    {
-        return $this->structure;
-    }
-
-    public function setStructure(Structure $structure): self
-    {
-        // set the owning side of the relation if necessary
-        if ($structure->getBranchId() !== $this) {
-            $structure->setBranchId($this);
-        }
-
-        $this->structure = $structure;
 
         return $this;
     }

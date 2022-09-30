@@ -40,12 +40,6 @@ class StructureType extends AbstractType
                 'required' => true,
                 'first_options'  => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Confirmez le mot de passe'],
-            ])
-            ->add('franchise', EntityType::class, [
-                'attr' => ['class' => 'form-select'],
-                'class' => Franchise::class,
-                'choice_label' => 'name',
-                'required' => true
             ]);
     }
 
