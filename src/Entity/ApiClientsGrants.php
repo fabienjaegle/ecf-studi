@@ -29,8 +29,8 @@ class ApiClientsGrants
     #[ORM\Column]
     private ?int $branch_id = null;
 
-    #[ORM\OneToOne(inversedBy: 'apiClientsGrants', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToOne(targetEntity: ApiClients::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'client_id', nullable: false)]
     private ?ApiClients $client = null;
 
     #[ORM\OneToMany(mappedBy: 'client_id', targetEntity: ApiInstallPerm::class, orphanRemoval: true)]
@@ -126,12 +126,7 @@ class ApiClientsGrants
 
     public function removeApiInstallPerm(ApiInstallPerm $apiInstallPerm): self
     {
-        if ($this->apiInstallPerms->removeElement($apiInstallPerm)) {
-            // set the owning side to null (unless already changed)
-            if ($apiInstallPerm->getClientGrants() === $this) {
-                $apiInstallPerm->setClientGrants(null);
-            }
-        }
+        $this->apiInstallPerms->removeElement($apiInstallPerm);
 
         return $this;
     }

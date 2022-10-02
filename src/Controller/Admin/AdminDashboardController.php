@@ -5,12 +5,15 @@ namespace App\Controller\Admin;
 use App\Entity\Admin;
 use App\Entity\ApiClients;
 use App\Entity\ApiClientsGrants;
+use App\Entity\ApiInstallPerm;
 use App\Entity\Franchise;
 use App\Entity\Structure;
 use App\Form\FranchiseEditType;
 use App\Form\FranchiseType;
 use App\Form\StructureType;
+use App\Repository\ApiClientsGrantsRepository;
 use App\Repository\ApiClientsRepository;
+use App\Repository\ApiInstallPermRepository;
 use App\Repository\FranchiseRepository;
 use App\Repository\StructureRepository;
 use App\Service\JWTService;
@@ -128,7 +131,7 @@ class AdminDashboardController extends AbstractController
     }
 
     #[Route('/dashboard/admin/franchise/{id}', name: 'app_dashboard_admin_franchise_details', methods: ['GET'], requirements: ['id' => '\d+'])]
-    public function show(FranchiseRepository $franchiseRepository, ApiClientsRepository $apiClientsRepository, int $id): Response
+    public function show_franchise(FranchiseRepository $franchiseRepository, ApiClientsRepository $apiClientsRepository, int $id): Response
     {
         $franchise = $franchiseRepository->find($id);
         $client = $apiClientsRepository->findOneBy(['client_id' => $id]);
@@ -140,7 +143,7 @@ class AdminDashboardController extends AbstractController
     }
 
     #[Route('/dashboard/admin/franchise/{id}/edit', name: 'app_dashboard_admin_edit_franchise', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
-    public function edit(Request $request, int $id, FranchiseRepository $franchiseRepository): Response
+    public function edit_franchise(Request $request, int $id, FranchiseRepository $franchiseRepository): Response
     {
         $franchise = $franchiseRepository->find($id);
 
@@ -160,7 +163,7 @@ class AdminDashboardController extends AbstractController
     }
 
     #[Route('/dashboard/franchise/{id}', name: 'app_dashboard_admin_delete_franchise', methods: ['POST'])]
-    public function delete(Request $request, Franchise $franchise, FranchiseRepository $franchiseRepository): Response
+    public function delete_franchise(Request $request, Franchise $franchise, FranchiseRepository $franchiseRepository): Response
     {
         if ($this->isCsrfTokenValid('delete' . $franchise->getId(), $request->request->get('_token'))) {
             $franchiseRepository->remove($franchise, true);
@@ -196,7 +199,6 @@ class AdminDashboardController extends AbstractController
             $structure->setFranchise($franchise);
 
             $entityManager->persist($structure);
-            $entityManager->flush();
 
             $apiClient = new ApiClients();
             $apiClient->setClientId($id);
@@ -212,7 +214,6 @@ class AdminDashboardController extends AbstractController
             $apiClient->setCommercialContact("");
 
             $entityManager->persist($apiClient);
-            $entityManager->flush();
 
             $apiClientGrants = new ApiClientsGrants();
             $apiClientGrants->setClient($apiClient);
@@ -222,7 +223,24 @@ class AdminDashboardController extends AbstractController
             $apiClientGrants->setBranchId($structure->getId());
 
             $entityManager->persist($apiClientGrants);
-            $entityManager->flush();
+
+            /*$apiInstallPerms = new ApiInstallPerm();
+            $apiInstallPerms->setBranchId($structure->getId());
+            $apiInstallPerms->setInstallId($franchise->getDomain()->getId());
+            $apiInstallPerms->setClientGrants($apiClientGrants);
+            $apiInstallPerms->setMembersAdd(true);
+            $apiInstallPerms->setMembersRead(true);
+            $apiInstallPerms->setMembersWrite(true);
+            $apiInstallPerms->setMembersPaymentSchedulesRead(true);
+            $apiInstallPerms->setMembersProductsAdd(true);
+            $apiInstallPerms->setMembersStatistiquesRead(true);
+            $apiInstallPerms->setMembersSubscriptionRead(true);
+            $apiInstallPerms->setPaymentDayRead(true);
+            $apiInstallPerms->setPaymentSchedulesRead(true);
+            $apiInstallPerms->setPaymentSchedulesWrite(true);
+
+            $entityManager->persist($apiInstallPerms);
+            $entityManager->flush();*/
 
             return $this->redirectToRoute('app_dashboard_admin_franchise_details', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
@@ -231,6 +249,21 @@ class AdminDashboardController extends AbstractController
             'franchise_id' => $id,
             'structure' => $structure,
             'form' => $form,
+        ]);
+    }
+
+    #[Route('/dashboard/admin/franchise/{id}/structure/{structure_id}', name: 'app_dashboard_admin_structure_details', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function show_structure(StructureRepository $structureRepository, ApiClientsRepository $apiClientsRepository, ApiClientsGrantsRepository $apiClientsGrantsRepository, ApiInstallPermRepository $apiInstallPermRepository, int $id, int $structure_id): Response
+    {
+        $structure = $structureRepository->find($structure_id);
+        $client = $apiClientsRepository->findOneBy(['client_id' => $id]);
+        $grants = $apiClientsGrantsRepository->findOneBy(['client' => $client->getId()]);
+
+        return $this->render('admin/details-structure.html.twig', [
+            'franchise_id' => $id,
+            'structure' => $structure,
+            'client' => $client,
+            'grants' => $grants
         ]);
     }
 }
