@@ -52,25 +52,25 @@
 					<div class="card-body">
 						<div class="media d-flex">
 							<div class="align-self-center">
-								<img class="img-fluid float-left" width="90" height="90" src="{{ client.logourl ? client.logourl : asset('assets/img/no-logo.png') }}" alt="{{ client.clientname }}"/>
+								<img class="img-fluid float-left" width="90" height="90" src="{{ structure.client.logourl ? structure.client.logourl : asset('assets/img/no-logo.png') }}" alt="{{ structure.client.clientname }}"/>
 							</div>
 							<div class="media-body text-right mx-3">
 								<p class="card-text">{{ structure.id }}</p>
 								<p class="card-text">
-									<a href="{{ path('app_dashboard_admin_structure_details', {'id': franchise.id, 'structure_id': structure.id}) }}">{{ client.clientname }}</a>
+									<a href="{{ path('app_dashboard_admin_structure_details', {'id': franchise.id, 'structure_id': structure.id}) }}">{{ structure.client.clientname }}</a>
 								</p>
-								<p class="card-text">{{ client.shortDescription }}</p>
-								<p class="card-text">{{ client.url }}</p>
+								<p class="card-text">{{ structure.client.shortDescription }}</p>
+								<p class="card-text">{{ structure.client.url }}</p>
 							</div>
 						</div>
 						<div class="media d-flex mt-3">
 							<div class="align-self-center">
-								<button type="button" class="btn btn-sm btn-switch float-left {{ client.active ? 'active' : '' }}" data-toggle="button" aria-pressed="false" autocomplete="off">
+								<button type="button" class="btn btn-sm btn-switch float-left {{ structure.client.active ? 'active' : '' }}" data-toggle="button" aria-pressed="false" autocomplete="off">
 									<div class="handle"></div>
 								</button>
 							</div>
 							<div class="media-body text-right">
-								<p class="card-text">{{ client.active ? 'Actif': 'Non actif' }}</p>
+								<p class="card-text">{{ structure.client.active ? 'Actif': 'Non actif' }}</p>
 							</div>
 						</div>
 					</div>

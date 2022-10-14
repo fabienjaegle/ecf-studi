@@ -41,6 +41,15 @@ class AdminDashboardController extends AbstractController
         return $this->render('admin/index.html.twig', ['data' => '']);
     }
 
+    function GUID()
+    {
+        if (function_exists('com_create_guid') === true) {
+            return trim(com_create_guid(), '{}');
+        }
+
+        return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+    }
+
     #[Route('/dashboard/admin/franchise/new', name: 'app_dashboard_admin_new_franchise', methods: ['GET', 'POST'])]
     public function new_franchise(Request $request, FranchiseRepository $franchiseRepository, ApiClientsRepository $apiClientsRepository, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
@@ -49,12 +58,9 @@ class AdminDashboardController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $franchise->getClient()->setClientId(strval($franchise->getId()));
-            $franchise->getClient()->setClientSecret($franchise->getPassword());
+            $franchise->getClient()->setClientId($this->Guid());
             $franchise->getClient()->setClientName($franchise->getName());
             $franchise->getClient()->setActive("0");
-
-            $franchiseRepository->add($franchise, true);
 
             // encode the password
             $franchise->setPassword(
@@ -64,6 +70,9 @@ class AdminDashboardController extends AbstractController
                 )
             );
 
+            // Hashed client secret
+            $franchise->getClient()->setClientSecret($franchise->getPassword());
+
             // Set the role
             $franchise->setRoles(['ROLE_FRANCHISE']);
 
@@ -72,8 +81,7 @@ class AdminDashboardController extends AbstractController
                 $franchise->setDomain($this->security->getUser());
             }
 
-            $entityManager->persist($franchise);
-            $entityManager->flush();
+            $franchiseRepository->add($franchise, true);
 
             // On génère le JWT de l'utilisateur
             // On crée le Header
@@ -118,34 +126,6 @@ class AdminDashboardController extends AbstractController
             ]);
         }
     }
-
-    /*#[Route('/dashboard/admin/franchises/active', name: 'app_dashboard_admin_active_franchises')]
-    public function active_franchises(): Response
-    {
-        $domain = $this->security->getUser();
-
-        if ($domain instanceof Admin) {
-            return $this->render('admin/active-franchises.html.twig', [
-                'active_franchises' => $domain->getFranchises()->filter(function ($item) {
-                    return $item->isActive();
-                })->getValues()
-            ]);
-        }
-    }
-
-    #[Route('/dashboard/admin/franchises/inactive', name: 'app_dashboard_admin_inactive_franchises')]
-    public function inactive_franchises(): Response
-    {
-        $domain = $this->security->getUser();
-
-        if ($domain instanceof Admin) {
-            return $this->render('admin/inactive-franchises.html.twig', [
-                'inactive_franchises' => $domain->getFranchises()->filter(function ($item) {
-                    return !$item->isActive();
-                })->getValues(),
-            ]);
-        }
-    }*/
 
     #[Route('/dashboard/admin/franchise/{id}', name: 'app_dashboard_admin_franchise_details', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show_franchise(FranchiseRepository $franchiseRepository, ApiClientsRepository $apiClientsRepository, int $id): Response
@@ -198,7 +178,12 @@ class AdminDashboardController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $structureRepository->add($structure, true);
+            $structure->getClient()->setClientId($this->Guid());
+            $structure->getClient()->setClientName($structure->getName());
+            $structure->getClient()->setActive("0");
+
+            // Set the role
+            $structure->setRoles(['ROLE_STRUCTURE']);
 
             // encode the password
             $structure->setPassword(
@@ -208,37 +193,16 @@ class AdminDashboardController extends AbstractController
                 )
             );
 
-            // Set the role
-            $structure->setRoles(['ROLE_STRUCTURE']);
+            // Hashed client secret
+            $structure->getClient()->setClientSecret($structure->getPassword());
+
+            $structureRepository->add($structure, true);
 
             // Set the franchise
             $structure->setFranchise($franchise);
 
             $entityManager->persist($structure);
-
-            $apiClient = new ApiClients();
-            $apiClient->setClientId($id);
-            $apiClient->setClientSecret($structure->getPassword());
-            $apiClient->setClientName($structure->getName());
-            $apiClient->setActive("0");
-            $apiClient->setShortDescription("");
-            $apiClient->setFullDescription("");
-            $apiClient->setLogoUrl("");
-            $apiClient->setUrl("");
-            $apiClient->setDpo("");
-            $apiClient->setTechnicalContact("");
-            $apiClient->setCommercialContact("");
-
-            $entityManager->persist($apiClient);
-
-            $apiClientGrants = new ApiClientsGrants();
-            $apiClientGrants->setClient($apiClient);
-            $apiClientGrants->setInstallId($franchise->getDomain()->getId());
-            $apiClientGrants->setActive("0");
-            $apiClientGrants->setPerms("{}");
-            $apiClientGrants->setBranchId($structure->getId());
-
-            $entityManager->persist($apiClientGrants);
+            $entityManager->flush();
 
             /*$apiInstallPerms = new ApiInstallPerm();
             $apiInstallPerms->setBranchId($structure->getId());
