@@ -39,28 +39,33 @@ class FranchiseRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Franchise[] Returns an array of Franchise objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('f.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Franchise[] Returns an array of Franchise objects
+     */
+    public function findByNameField($value = null): array
+    {
+        $queryBuilder = $this->createQueryBuilder('f')
+            ->orderBy('f.id', 'ASC')
+            ->addSelect();
 
-//    public function findOneBySomeField($value): ?Franchise
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        if ($value) {
+            $queryBuilder->andWhere('f.name LIKE :searchTerm')
+                ->setParameter('searchTerm', '%' . $value . '%');
+        }
+
+        return $queryBuilder
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
+
+    //    public function findOneBySomeField($value): ?Franchise
+    //    {
+    //        return $this->createQueryBuilder('f')
+    //            ->andWhere('f.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

@@ -19,6 +19,15 @@ class FranchiseType extends AbstractType
             ->add('name', TextType::class, [
                 'attr' => ['class' => 'form-control']
             ])
+            ->add('address', TextType::class, [
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('zipcode', TextType::class, [
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('city', TextType::class, [
+                'attr' => ['class' => 'form-control']
+            ])
             ->add('email', EmailType::class, [
                 'attr' => ['class' => 'form-control']
             ])
@@ -29,7 +38,7 @@ class FranchiseType extends AbstractType
                 'required' => true,
                 'first_options'  => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Confirmez le mot de passe'],
-            ]);
+            ])->add('client', ApiClientsType::class, []);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

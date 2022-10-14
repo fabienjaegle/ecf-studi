@@ -10,8 +10,10 @@
 				<tr>
 					<th scope="col">#</th>
 					<th scope="col">Nom</th>
+					<th scope="col">Adresse</th>
+					<th scope="col">Code postal</th>
+					<th scope="col">Ville</th>
 					<th scope="col">Email</th>
-					<th scope="col">Est actif ?</th>
 					<th scope="col">Action</th>
 				</tr>
 			</thead>
@@ -20,16 +22,18 @@
 					<tr>
 						<td>{{ franchise.id }}</td>
 						<td>{{ franchise.name }}</td>
+						<td>{{ franchise.address }}</td>
+						<td>{{ franchise.zipcode }}</td>
+						<td>{{ franchise.city }}</td>
 						<td>{{ franchise.email }}</td>
-						<td>{{ franchise.active ? 'Oui' : 'Non' }}</td>
 						<td>
 							<a href="{{ path('app_dashboard_admin_franchise_details', {'id': franchise.id}) }}">Détails</a>
-							<a href="{{ path('app_dashboard_edit_franchise', {'id': franchise.id}) }}">Modifier</a>
+							<a href="{{ path('app_dashboard_admin_edit_franchise', {'id': franchise.id}) }}">Modifier</a>
 						</td>
 					</tr>
 				{% else %}
 					<tr>
-						<td class="text-center" colspan="5">Aucune franchise</td>
+						<td class="text-center" colspan="7">Aucune franchise</td>
 					</tr>
 				{% endfor %}
 			</tbody>

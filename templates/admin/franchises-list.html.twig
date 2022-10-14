@@ -1,0 +1,97 @@
+{% extends 'admin.html.twig' %}
+
+{% block body %}
+	<div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+
+		<form role="search" id="nav-search-form" method="post" action="{{ path('app_dashboard_admin_search') }}">
+			<div class="d-flex justify-content-between">
+				<input class="form-control form-control-dark rounded-0 border-0" id="client_name" name="client_name" type="text" placeholder="Nom du client" aria-label="Nom du client">
+				<input class="form-control form-control-dark rounded-0 border-0" id="client_id" name="client_id" type="text" placeholder="ID du client" aria-label="ID du client">
+			</div>
+			<input type="checkbox" class="btn-check" id="btn-check-outlined" autocomplete="off">
+			<label class="btn btn-outline-primary" for="btn-check-outlined">Actif</label>
+
+			<input type="checkbox" class="btn-check" id="btn-check-2-outlined" autocomplete="off">
+			<label class="btn btn-outline-secondary" for="btn-check-2-outlined">Non actif</label><br>
+		</form>
+		<hr>
+		{% for franchise in franchises %}
+			<div class="col-xl-6 col-sm-12 col-12">
+				<div class="card">
+					<div class="card-body">
+						<div class="media d-flex">
+							<div class="align-self-center">
+								<img class="img-fluid float-left" width="90" height="90" src="{{ franchise.client.logourl ? franchise.client.logourl : asset('assets/img/no-logo.png') }}" alt="{{ franchise.client.clientname }}"/>
+							</div>
+							<div class="media-body text-right mx-3">
+								<p class="card-text">{{ franchise.id }}</p>
+								<p class="card-text">
+									<a href="{{ path('app_dashboard_admin_franchise_details', {'id': franchise.id}) }}">{{ franchise.client.clientname }}</a>
+								</p>
+								<p class="card-text">{{ franchise.client.shortDescription }}</p>
+								<p class="card-text">{{ franchise.client.url }}</p>
+							</div>
+						</div>
+						<div class="media d-flex mt-3">
+							<div class="align-self-center">
+								<button type="button" class="btn btn-sm btn-switch float-left {{ franchise.client.active ? 'active' : '' }}" data-toggle="button" aria-pressed="false" autocomplete="off">
+									<div class="handle"></div>
+								</button>
+							</div>
+							<div class="media-body text-right">
+								<p class="card-text">{{ franchise.client.active ? 'Actif': 'Non actif' }}</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% else %}
+			<p>Aucune franchise pour le moment.</p>
+		{% endfor %}
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script type="text/javascript">
+			jQuery(document).ready(function () {
+var searchRequest = null;
+$("#client_name").keyup(function (e) { /* La variable value va prendre la valeur insérer dans le champ de texte afin d’effectuer la recherche */
+var minlength = 3;
+var that = this;
+var value = $(this).val();
+var entitySelector = $("#result").html('');
+if (value.length >= minlength || value.length == 0) {
+if (searchRequest != null) 
+searchRequest.abort();
+
+
+
+/* Ajax est lancé lors du remplissage du champ texte dont l’id est « search » pour faire la recherche */
+searchRequest = $.ajax({ /* l’url est une chaine de caractères contenant l’adresse où la requête est envoyée */
+url: "{{ path('app_dashboard_admin_search') }}",
+/* La méthode utilisée pour transférer les données est GET */
+type: 'POST',
+/*Ici search value va prendre la chaine entrée par un utilisateur dans la zone de recherche et sera placée après l’url */
+data: {
+'searchValue': value
+},
+/*Cette fonction permet de vider le contenu du tableau pour recevoir le nouveau contenu*/
+success: function (msg) {
+var result = JSON.parse(msg);
+
+$.each(result, function (key, arr) {
+$.each(arr, function (id, value) {
+if (key == 'franchises') {
+if (id != 'error') {
+// entitySelector.append('<tr><td>' + id + '</td><td>' + value.name + '</td><td>' + value.address + '</td><td>' + value.zipcode + '</td><td>' + value.city + '</td><td>' + value.email + '</td><td>' + value.active + '</td></tr>');
+// } else {
+// entitySelector.append('<tr><td class="text-center" colspan="8">Aucun résultat</td></tr>');
+}
+}
+});
+});
+}
+});
+}
+});
+});
+		</script>
+	{% endblock %}

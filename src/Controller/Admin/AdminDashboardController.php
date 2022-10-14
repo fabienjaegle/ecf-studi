@@ -11,15 +11,15 @@ use App\Entity\Structure;
 use App\Form\FranchiseEditType;
 use App\Form\FranchiseType;
 use App\Form\StructureType;
+use App\Repository\AdminRepository;
 use App\Repository\ApiClientsGrantsRepository;
 use App\Repository\ApiClientsRepository;
 use App\Repository\ApiInstallPermRepository;
 use App\Repository\FranchiseRepository;
 use App\Repository\StructureRepository;
-use App\Service\JWTService;
-use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -38,17 +38,22 @@ class AdminDashboardController extends AbstractController
     #[Route('/dashboard/admin', name: 'app_dashboard_admin_index')]
     public function index(): Response
     {
-        return $this->render('admin/index.html.twig', []);
+        return $this->render('admin/index.html.twig', ['data' => '']);
     }
 
     #[Route('/dashboard/admin/franchise/new', name: 'app_dashboard_admin_new_franchise', methods: ['GET', 'POST'])]
-    public function new_franchise(Request $request, SendMailService $mail, JWTService $jwt, FranchiseRepository $franchiseRepository, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function new_franchise(Request $request, FranchiseRepository $franchiseRepository, ApiClientsRepository $apiClientsRepository, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $franchise = new Franchise();
         $form = $this->createForm(FranchiseType::class, $franchise);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $franchise->getClient()->setClientId(strval($franchise->getId()));
+            $franchise->getClient()->setClientSecret($franchise->getPassword());
+            $franchise->getClient()->setClientName($franchise->getName());
+            $franchise->getClient()->setActive("0");
+
             $franchiseRepository->add($franchise, true);
 
             // encode the password
@@ -93,7 +98,7 @@ class AdminDashboardController extends AbstractController
                 compact('franchise', 'token')
             );*/
 
-            return $this->redirectToRoute('app_dashboard_admin_inactive_franchises', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_dashboard_admin_franchises_list', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('admin/new-franchise.html.twig', [
@@ -102,7 +107,19 @@ class AdminDashboardController extends AbstractController
         ]);
     }
 
-    #[Route('/dashboard/admin/franchises/active', name: 'app_dashboard_admin_active_franchises')]
+    #[Route('/dashboard/admin/franchises/list', name: 'app_dashboard_admin_franchises_list')]
+    public function franchises_list(AdminRepository $adminRepository): Response
+    {
+        $domain = $this->security->getUser();
+
+        if ($domain instanceof Admin) {
+            return $this->render('admin/franchises-list.html.twig', [
+                'franchises' => $domain->getFranchises()
+            ]);
+        }
+    }
+
+    /*#[Route('/dashboard/admin/franchises/active', name: 'app_dashboard_admin_active_franchises')]
     public function active_franchises(): Response
     {
         $domain = $this->security->getUser();
@@ -128,17 +145,15 @@ class AdminDashboardController extends AbstractController
                 })->getValues(),
             ]);
         }
-    }
+    }*/
 
     #[Route('/dashboard/admin/franchise/{id}', name: 'app_dashboard_admin_franchise_details', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show_franchise(FranchiseRepository $franchiseRepository, ApiClientsRepository $apiClientsRepository, int $id): Response
     {
         $franchise = $franchiseRepository->find($id);
-        $client = $apiClientsRepository->findOneBy(['client_id' => $id]);
 
         return $this->render('admin/details-franchise.html.twig', [
-            'franchise' => $franchise,
-            'client' => $client
+            'franchise' => $franchise
         ]);
     }
 
@@ -153,7 +168,8 @@ class AdminDashboardController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $franchiseRepository->add($franchise, true);
 
-            return $this->redirectToRoute('app_dashboard_admin_active_franchises', [], Response::HTTP_SEE_OTHER);
+
+            return $this->redirectToRoute('app_dashboard_admin_franchises_list', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('admin/edit-franchise.html.twig', [
@@ -219,7 +235,7 @@ class AdminDashboardController extends AbstractController
             $apiClientGrants->setClient($apiClient);
             $apiClientGrants->setInstallId($franchise->getDomain()->getId());
             $apiClientGrants->setActive("0");
-            $apiClientGrants->setPerms("");
+            $apiClientGrants->setPerms("{}");
             $apiClientGrants->setBranchId($structure->getId());
 
             $entityManager->persist($apiClientGrants);
@@ -265,5 +281,44 @@ class AdminDashboardController extends AbstractController
             'client' => $client,
             'grants' => $grants
         ]);
+    }
+
+    #[Route('/dashboard/admin/search', name: 'app_dashboard_admin_search', methods: ['POST'])]
+    public function searchAction(FranchiseRepository $franchiseRepository, Request $request)
+    {
+        $result = $franchiseRepository->findByNameField(
+            $request->query->get('searchValue')
+        );
+
+        var_dump($result);
+        die();
+
+        if (!$result) {
+            $result['franchises']['error'] = "Aucun résultat";
+        } else {
+            $result['franchises'] = $this->getRealEntities($result);
+        }
+
+        //return new Response(json_encode($result));
+
+        return $this->render('admin/franchises-list.html.twig', ['franchises' => $result['franchises']]);
+    }
+
+    public function getRealEntities($entities)
+    {
+
+        foreach ($entities as $entity) {
+            $realEntities[$entity->getId()] = array(
+                'id' => $entity->getId(),
+                'name' => $entity->getName(),
+                'address' => $entity->getAddress(),
+                'zipcode' => $entity->getZipCode(),
+                'city' => $entity->getCity(),
+                'email' => $entity->getEmail(),
+                'active' => $entity->isActive() ? 'Oui' : 'Non'
+            );
+        }
+
+        return $realEntities;
     }
 }

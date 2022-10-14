@@ -22,6 +22,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $address = null;
+
+    #[ORM\Column(length: 5)]
+    private ?string $zipcode = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $city = null;
+
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
@@ -37,6 +46,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?bool $isActive = false;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?ApiClients $client = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -50,6 +62,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getName(): ?string
     {
         return $this->name;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getZipcode(): ?string
+    {
+        return $this->zipcode;
+    }
+
+    public function setZipcode(string $zipcode): self
+    {
+        $this->zipcode = $zipcode;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): self
+    {
+        $this->city = $city;
+
+        return $this;
     }
 
     public function setName(string $name): self
@@ -132,6 +180,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getClient(): ?ApiClients
+    {
+        return $this->client;
+    }
+
+    public function setClient(?ApiClients $client): self
+    {
+        $this->client = $client;
 
         return $this;
     }

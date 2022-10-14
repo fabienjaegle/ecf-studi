@@ -28,6 +28,30 @@
 			</div>
 		</div>
 		<div class="col-12">
+			{{ form_label(form.address, 'Adresse', {'label_attr': {'class': 'form-label'}}) }}
+			{{ form_widget(form.address) }}
+
+			<div class="invalid-feedback">
+				{{ form_errors(form.address) }}
+			</div>
+		</div>
+		<div class="col-12">
+			{{ form_label(form.zipcode, 'Code postal', {'label_attr': {'class': 'form-label'}}) }}
+			{{ form_widget(form.zipcode) }}
+
+			<div class="invalid-feedback">
+				{{ form_errors(form.zipcode) }}
+			</div>
+		</div>
+		<div class="col-12">
+			{{ form_label(form.city, 'Ville', {'label_attr': {'class': 'form-label'}}) }}
+			{{ form_widget(form.city) }}
+
+			<div class="invalid-feedback">
+				{{ form_errors(form.city) }}
+			</div>
+		</div>
+		<div class="col-12">
 			{{ form_label(form.email, 'Adresse mail', {'label_attr': {'class': 'form-label'}}) }}
 			{{ form_widget(form.email) }}
 

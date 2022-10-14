@@ -18,6 +18,15 @@ class FranchiseEditType extends AbstractType
             ->add('name', TextType::class, [
                 'attr' => ['class' => 'form-control']
             ])
+            ->add('address', TextType::class, [
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('zipcode', TextType::class, [
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('city', TextType::class, [
+                'attr' => ['class' => 'form-control']
+            ])
             ->add('email', EmailType::class, [
                 'attr' => ['class' => 'form-control']
             ])

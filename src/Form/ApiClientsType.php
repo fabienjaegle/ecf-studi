@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\ApiClients;
 use App\Entity\Franchise;
 use App\Entity\Structure;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -12,41 +13,47 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-class StructureType extends AbstractType
+class ApiClientsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class, [
+            ->add('short_description', TextType::class, [
+                'label' => 'Description courte',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('address', TextType::class, [
+            ->add('full_description', TextareaType::class, [
+                'label' => 'Description longue',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('zipcode', TextType::class, [
+            ->add('logo_url', TextType::class, [
+                'label' => 'URL du logo',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('city', TextType::class, [
+            ->add('url', TextType::class, [
+                'label' => 'URL',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('email', EmailType::class, [
+            ->add('dpo', TextType::class, [
+                'label' => 'Délégué à la Protection des données (DPO)',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'invalid_message' => 'Les champs mot de passe doivent être identiques.',
-                'options' => ['attr' => ['class' => 'form-control']],
-                'required' => true,
-                'first_options'  => ['label' => 'Mot de passe'],
-                'second_options' => ['label' => 'Confirmez le mot de passe'],
-            ])->add('client', ApiClientsType::class, []);
+            ->add('technical_contact', TextType::class, [
+                'label' => 'Contact technique',
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('commercial_contact', TextType::class, [
+                'label' => 'Contact commercial',
+                'attr' => ['class' => 'form-control']
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Structure::class,
+            'data_class' => ApiClients::class,
         ]);
     }
 }

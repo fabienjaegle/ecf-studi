@@ -1,12 +1,41 @@
 {% extends 'admin.html.twig' %}
 
 {% block body %}
-	<div class="form-control mb-4">
-		<div class="d-flex justify-content-between">
-			<div>{{ franchise.name }}</div>
-			<div>{{ franchise.id }}</div>
+	<div class="col-12">
+		<div class="card">
+			<div class="card-body">
+				<div class="media d-flex">
+					<div class="align-self-center">
+						<img class="img-fluid float-left" width="90" height="90" src="{{ franchise.client.logourl ? franchise.client.logourl : asset('assets/img/no-logo.png') }}" alt="{{ franchise.client.clientname }}"/>
+					</div>
+					<div class="media-body text-right mx-3">
+						<p class="card-text">{{ franchise.id }}</p>
+						<p class="card-text">
+							<a href="{{ path('app_dashboard_admin_franchise_details', {'id': franchise.id}) }}">{{ franchise.client.clientname }}</a>
+						</p>
+						<p class="card-text">{{ franchise.client.fullDescription }}</p>
+					</div>
+					<div class="media-body text-right mx-3">
+						<p class="card-text">
+							<a href="{{ franchise.client.url }}">{{ franchise.client.url }}</a>
+						</p>
+						<p class="card-text">{{ franchise.client.dpo }}</p>
+						<p class="card-text">{{ franchise.client.technicalContact }}</p>
+						<p class="card-text">{{ franchise.client.commercialContact }}</p>
+					</div>
+				</div>
+				<div class="media d-flex mt-3">
+					<div class="align-self-center">
+						<button type="button" class="btn btn-sm btn-switch float-left {{ franchise.client.active ? 'active' : '' }}" data-toggle="button" aria-pressed="false" autocomplete="off">
+							<div class="handle"></div>
+						</button>
+					</div>
+					<div class="media-body text-right">
+						<p class="card-text">{{ franchise.client.active ? 'Actif': 'Non actif' }}</p>
+					</div>
+				</div>
+			</div>
 		</div>
-		{{franchise.active ? 'Actif' : 'Non actif' }}
 	</div>
 	<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 		<h3>Structures associés à la franchise</h3>
