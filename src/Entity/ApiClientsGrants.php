@@ -33,12 +33,12 @@ class ApiClientsGrants
     #[ORM\JoinColumn(name: 'client_id', nullable: false)]
     private ?ApiClients $client = null;
 
-    #[ORM\OneToMany(mappedBy: 'client_id', targetEntity: ApiInstallPerm::class, orphanRemoval: true)]
-    private Collection $apiInstallPerms;
+    //#[ORM\OneToMany(mappedBy: 'client_id', targetEntity: ApiInstallPerm::class, orphanRemoval: true)]
+    //private Collection $apiInstallPerms;
 
     public function __construct()
     {
-        $this->apiInstallPerms = new ArrayCollection();
+        //$this->apiInstallPerms = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,7 +109,7 @@ class ApiClientsGrants
     /**
      * @return Collection<int, ApiInstallPerm>
      */
-    public function getApiInstallPerms(): Collection
+    /*public function getApiInstallPerms(): Collection
     {
         return $this->apiInstallPerms;
     }
@@ -129,5 +129,5 @@ class ApiClientsGrants
         $this->apiInstallPerms->removeElement($apiInstallPerm);
 
         return $this;
-    }
+    }*/
 }

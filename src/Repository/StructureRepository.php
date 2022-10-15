@@ -39,28 +39,32 @@ class StructureRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Structure[] Returns an array of Structure objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Structure[] Returns an array of Structure objects
+     */
+    public function findDetails($value): array
+    {
+        $entityManager = $this->getEntityManager();
 
-//    public function findOneBySomeField($value): ?Structure
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $query = $entityManager->createQuery(
+            'SELECT s, c, g
+            FROM App\Entity\Structure s
+            INNER JOIN  App\Entity\ApiClients c WITH c = s.client
+            INNER JOIN App\Entity\ApiClientsGrants g WITH g.client = c.client_id
+            WHERE s.franchise = :franchise
+            AND c.client_id = g.client'
+        )->setParameter('franchise', $value);
+
+        return $query->getResult();
+    }
+
+    //    public function findOneBySomeField($value): ?Structure
+    //    {
+    //        return $this->createQueryBuilder('s')
+    //            ->andWhere('s.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

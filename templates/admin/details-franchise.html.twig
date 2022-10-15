@@ -1,81 +1,64 @@
 {% extends 'admin.html.twig' %}
 
 {% block body %}
+	<a href="{{ path('app_dashboard_admin_franchises_list') }}" role="button" class="btn btn-outline-success mt-3">Liste des franchises</a>
 	<div class="col-12">
 		<div class="card">
-			<div class="card-body">
-				<div class="media d-flex">
-					<div class="align-self-center">
-						<img class="img-fluid float-left" width="90" height="90" src="{{ franchise.client.logourl ? franchise.client.logourl : asset('assets/img/no-logo.png') }}" alt="{{ franchise.client.clientname }}"/>
-					</div>
-					<div class="media-body text-right mx-3">
-						<p class="card-text">{{ franchise.id }}</p>
-						<p class="card-text">
-							<a href="{{ path('app_dashboard_admin_franchise_details', {'id': franchise.id}) }}">{{ franchise.client.clientname }}</a>
-						</p>
-						<p class="card-text">{{ franchise.client.fullDescription }}</p>
-					</div>
-					<div class="media-body text-right mx-3">
-						<p class="card-text">
-							<a href="{{ franchise.client.url }}">{{ franchise.client.url }}</a>
-						</p>
-						<p class="card-text">{{ franchise.client.dpo }}</p>
-						<p class="card-text">{{ franchise.client.technicalContact }}</p>
-						<p class="card-text">{{ franchise.client.commercialContact }}</p>
-					</div>
+			<div class="card-body d-flex">
+				<div class="col-2">
+					<img class="img-fluid rounded" width="90" height="90" src="{{ franchise.client.logourl ? franchise.client.logourl : asset('assets/img/no-logo.png') }}" alt="{{ franchise.client.clientname }}"/>
 				</div>
-				<div class="media d-flex mt-3">
-					<div class="align-self-center">
-						<button type="button" class="btn btn-sm btn-switch float-left {{ franchise.client.active ? 'active' : '' }}" data-toggle="button" aria-pressed="false" autocomplete="off">
-							<div class="handle"></div>
-						</button>
-					</div>
-					<div class="media-body text-right">
-						<p class="card-text">{{ franchise.client.active ? 'Actif': 'Non actif' }}</p>
-					</div>
+				<div class="col-5 px-2">
+					<p class="card-text">Nom du client :
+						{{ franchise.client.clientname }}</p>
+					<p class="card-text">Description complète :
+						{{ franchise.client.fullDescription }}</p>
+				</div>
+				<div class="col-5 px-2">
+					<p class="card-text">URL :
+						<a href="http://{{ franchise.client.url }}">{{ franchise.client.url }}</a>
+					</p>
+					<p class="card-text">Délégué à la Protecton des données (DPO) :
+						{{ franchise.client.dpo }}</p>
+					<p class="card-text">Contact technique :
+						{{ franchise.client.technicalContact }}</p>
+					<p class="card-text">Contact commercial :
+						{{ franchise.client.commercialContact }}</p>
+				</div>
+			</div>
+			<div class="card-body d-flex">
+				<div class="col-1">
+					<button type="button" class="btn btn-sm btn-switch {{ franchise.client.active ? 'active' : '' }}" data-toggle="button" aria-pressed="false" autocomplete="off">
+						<div class="handle"></div>
+					</button>
+				</div>
+				<div class="col-11">
+					{{ franchise.client.active ? 'Actif': 'Non actif' }}
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-		<h3>Structures associés à la franchise</h3>
-		<div class="btn-toolbar mb-2 mb-md-0">
-			<div class="btn-group me-2">
-				<a href="{{ path('app_dashboard_admin_new_structure', {'id': franchise.id}) }}" class="btn btn-outline-primary">Nouvelle structure</a>
+	<div class="form-control my-3">
+		<form role="search" id="nav-search-form" method="post" action="{{ path('app_dashboard_admin_search') }}">
+			<div class="d-flex justify-content-between">
+				<input class="form-control form-control-dark rounded-0 border-0" id="client_name" name="client_name" type="text" placeholder="Nom du client" aria-label="Nom du client">
+				<input class="form-control form-control-dark rounded-0 border-0" id="client_id" name="client_id" type="text" placeholder="ID du client" aria-label="ID du client">
+				<div class="d-flex justify-content-between">
+					<a href="#" class="btn btn-outline-primary">Toutes</a>
+				</div>
 			</div>
-		</div>
+			<div class="d-flex justify-content-between">
+				<div class="btn-group me-2">
+					<a href="#" class="btn btn-outline-primary">Actif</a>
+					<a href="#" class="btn btn-outline-primary">Non actif</a>
+				</div>
+				<a href="{{ path('app_dashboard_admin_new_structure', {'id': franchise.id}) }}" class="btn btn-outline-primary">Ajouter</a>
+			</div>
+		</form>
 	</div>
 	<div class="row">
-		{% for structure in franchise.structures %}
-			<div class="col-xl-6 col-sm-12 col-12">
-				<div class="card">
-					<div class="card-body">
-						<div class="media d-flex">
-							<div class="align-self-center">
-								<img class="img-fluid float-left" width="90" height="90" src="{{ structure.client.logourl ? structure.client.logourl : asset('assets/img/no-logo.png') }}" alt="{{ structure.client.clientname }}"/>
-							</div>
-							<div class="media-body text-right mx-3">
-								<p class="card-text">{{ structure.id }}</p>
-								<p class="card-text">
-									<a href="{{ path('app_dashboard_admin_structure_details', {'id': franchise.id, 'structure_id': structure.id}) }}">{{ structure.client.clientname }}</a>
-								</p>
-								<p class="card-text">{{ structure.client.shortDescription }}</p>
-								<p class="card-text">{{ structure.client.url }}</p>
-							</div>
-						</div>
-						<div class="media d-flex mt-3">
-							<div class="align-self-center">
-								<button type="button" class="btn btn-sm btn-switch float-left {{ structure.client.active ? 'active' : '' }}" data-toggle="button" aria-pressed="false" autocomplete="off">
-									<div class="handle"></div>
-								</button>
-							</div>
-							<div class="media-body text-right">
-								<p class="card-text">{{ structure.client.active ? 'Actif': 'Non actif' }}</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+		{% for structure in structures %}
+			{{dump(structure)}}
 		{% else %}
 			<p>Aucune structure associée pour le moment.</p>
 		{% endfor %}

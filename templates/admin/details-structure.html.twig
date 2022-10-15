@@ -18,35 +18,35 @@
 			<div class="card">
 				<div class="card-body d-flex">
 					<div class="col-2">
-						<img class="img-fluid rounded" width="90" height="90" src="{{ client.logourl ? client.logourl : asset('assets/img/no-logo.png') }}" alt="{{ client.clientname }}"/>
+						<img class="img-fluid rounded" width="90" height="90" src="{{ structure.client.logourl ? structure.client.logourl : asset('assets/img/no-logo.png') }}" alt="{{ structure.client.clientname }}"/>
 					</div>
 					<div class="col-5 px-2">
 						<p class="card-text">ID :
 							{{ structure.id }}</p>
 						<p class="card-text">Nom du client :
-							{{ client.clientname }}</p>
+							{{ structure.client.clientname }}</p>
 						<p class="card-text">Description complète :
-							{{ client.fullDescription }}</p>
+							{{ structure.client.fullDescription }}</p>
 					</div>
 					<div class="col-5 px-2">
 						<p class="card-text">URL :
-							{{ client.url }}</p>
+							{{ structure.client.url }}</p>
 						<p class="card-text">dpo :
-							{{ client.dpo }}</p>
+							{{ structure.client.dpo }}</p>
 						<p class="card-text">contact technique :
-							{{ client.technicalContact }}</p>
+							{{ structure.client.technicalContact }}</p>
 						<p class="card-text">contact commercial :
-							{{ client.commercialContact }}</p>
+							{{ structure.client.commercialContact }}</p>
 					</div>
 				</div>
 				<div class="card-body d-flex">
 					<div class="col-1">
-						<button type="button" class="btn btn-sm btn-switch {{ client.active ? 'active' : '' }}" data-toggle="button" aria-pressed="false" autocomplete="off">
+						<button type="button" class="btn btn-sm btn-switch {{ structure.client.active ? 'active' : '' }}" data-toggle="button" aria-pressed="false" autocomplete="off">
 							<div class="handle"></div>
 						</button>
 					</div>
 					<div class="col-11">
-						{{ client.active ? 'Actif': 'Non actif' }}
+						{{ structure.client.active ? 'Actif': 'Non actif' }}
 					</div>
 				</div>
 			</div>
@@ -62,37 +62,5 @@
 		{{structure.active ? 'Actif' : 'Non actif' }}
 	</div>
 
-	<div class="row">
-		{% for perms in grants.apiInstallPerms %}
-			<div class="col-xl-12 col-sm-12 col-12">
-				<div class="card">
-					<div class="card-body d-flex">
-						<div class="col-2">
-							<img class="img-fluid rounded" width="90" height="90" src="{{ client.logourl ? client.logourl : asset('assets/img/no-logo.png') }}" alt="{{ client.clientname }}"/>
-						</div>
-						<div class="col-10 px-2">
-							<p class="card-text">client ID :
-								{{ grants.id }}</p>
-							<p class="card-text">Install ID :
-								{{ grants.installId }}</p>
-							<p class="card-text">Branch ID :
-								{{ grants.branchId }}</p>
-						</div>
-					</div>
-					<div class="card-body d-flex">
-						<div class="col-1">
-							<button type="button" class="btn btn-sm btn-switch {{ grants.active ? 'active' : '' }}" data-toggle="button" aria-pressed="false" autocomplete="off">
-								<div class="handle"></div>
-							</button>
-						</div>
-						<div class="col-11">
-							{{ grants.active ? 'Actif': 'Non actif' }}
-						</div>
-					</div>
-				</div>
-			</div>
-		{% endfor %}
-
-	</div>
 
 {% endblock %}

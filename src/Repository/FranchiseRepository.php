@@ -58,14 +58,4 @@ class FranchiseRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
-    //    public function findOneBySomeField($value): ?Franchise
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

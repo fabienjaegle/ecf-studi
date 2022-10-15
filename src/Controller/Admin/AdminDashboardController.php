@@ -35,12 +35,6 @@ class AdminDashboardController extends AbstractController
         $this->security = $security;
     }
 
-    #[Route('/dashboard/admin', name: 'app_dashboard_admin_index')]
-    public function index(): Response
-    {
-        return $this->render('admin/index.html.twig', ['data' => '']);
-    }
-
     function GUID()
     {
         if (function_exists('com_create_guid') === true) {
@@ -48,6 +42,12 @@ class AdminDashboardController extends AbstractController
         }
 
         return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+    }
+
+    #[Route('/dashboard/admin', name: 'app_dashboard_admin_index')]
+    public function index(): Response
+    {
+        return $this->render('admin/index.html.twig', ['data' => '']);
     }
 
     #[Route('/dashboard/admin/franchise/new', name: 'app_dashboard_admin_new_franchise', methods: ['GET', 'POST'])]
@@ -116,7 +116,7 @@ class AdminDashboardController extends AbstractController
     }
 
     #[Route('/dashboard/admin/franchises/list', name: 'app_dashboard_admin_franchises_list')]
-    public function franchises_list(AdminRepository $adminRepository): Response
+    public function franchises_list(): Response
     {
         $domain = $this->security->getUser();
 
@@ -128,12 +128,14 @@ class AdminDashboardController extends AbstractController
     }
 
     #[Route('/dashboard/admin/franchise/{id}', name: 'app_dashboard_admin_franchise_details', methods: ['GET'], requirements: ['id' => '\d+'])]
-    public function show_franchise(FranchiseRepository $franchiseRepository, ApiClientsRepository $apiClientsRepository, int $id): Response
+    public function show_franchise(FranchiseRepository $franchiseRepository, StructureRepository $structureRepository, int $id): Response
     {
         $franchise = $franchiseRepository->find($id);
+        $structures = $structureRepository->findDetails($franchise);
 
         return $this->render('admin/details-franchise.html.twig', [
-            'franchise' => $franchise
+            'franchise' => $franchise,
+            'structures' => $structures
         ]);
     }
 
@@ -158,7 +160,7 @@ class AdminDashboardController extends AbstractController
         ]);
     }
 
-    #[Route('/dashboard/franchise/{id}', name: 'app_dashboard_admin_delete_franchise', methods: ['POST'])]
+    #[Route('/dashboard/admin/franchise/{id}', name: 'app_dashboard_admin_delete_franchise', methods: ['POST'])]
     public function delete_franchise(Request $request, Franchise $franchise, FranchiseRepository $franchiseRepository): Response
     {
         if ($this->isCsrfTokenValid('delete' . $franchise->getId(), $request->request->get('_token'))) {
@@ -233,17 +235,13 @@ class AdminDashboardController extends AbstractController
     }
 
     #[Route('/dashboard/admin/franchise/{id}/structure/{structure_id}', name: 'app_dashboard_admin_structure_details', methods: ['GET'], requirements: ['id' => '\d+'])]
-    public function show_structure(StructureRepository $structureRepository, ApiClientsRepository $apiClientsRepository, ApiClientsGrantsRepository $apiClientsGrantsRepository, ApiInstallPermRepository $apiInstallPermRepository, int $id, int $structure_id): Response
+    public function show_structure(StructureRepository $structureRepository, ApiClientsGrantsRepository $apiClientsGrantsRepository, int $id, int $structure_id): Response
     {
         $structure = $structureRepository->find($structure_id);
-        $client = $apiClientsRepository->findOneBy(['client_id' => $id]);
-        $grants = $apiClientsGrantsRepository->findOneBy(['client' => $client->getId()]);
 
         return $this->render('admin/details-structure.html.twig', [
             'franchise_id' => $id,
-            'structure' => $structure,
-            'client' => $client,
-            'grants' => $grants
+            'structure' => $structure
         ]);
     }
 

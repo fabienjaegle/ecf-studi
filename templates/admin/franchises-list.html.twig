@@ -2,17 +2,15 @@
 
 {% block body %}
 	<div class="flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-
 		<form role="search" id="nav-search-form" method="post" action="{{ path('app_dashboard_admin_search') }}">
 			<div class="d-flex justify-content-between">
 				<input class="form-control form-control-dark rounded-0 border-0" id="client_name" name="client_name" type="text" placeholder="Nom du client" aria-label="Nom du client">
 				<input class="form-control form-control-dark rounded-0 border-0" id="client_id" name="client_id" type="text" placeholder="ID du client" aria-label="ID du client">
 			</div>
-			<input type="checkbox" class="btn-check" id="btn-check-outlined" autocomplete="off">
-			<label class="btn btn-outline-primary" for="btn-check-outlined">Actif</label>
-
-			<input type="checkbox" class="btn-check" id="btn-check-2-outlined" autocomplete="off">
-			<label class="btn btn-outline-secondary" for="btn-check-2-outlined">Non actif</label><br>
+			<div class="btn-group me-2">
+				<a href="#" class="btn btn-outline-primary">Actif</a>
+				<a href="#" class="btn btn-outline-primary">Non actif</a>
+			</div>
 		</form>
 		<hr>
 		{% for franchise in franchises %}
@@ -24,12 +22,14 @@
 								<img class="img-fluid float-left" width="90" height="90" src="{{ franchise.client.logourl ? franchise.client.logourl : asset('assets/img/no-logo.png') }}" alt="{{ franchise.client.clientname }}"/>
 							</div>
 							<div class="media-body text-right mx-3">
-								<p class="card-text">{{ franchise.id }}</p>
 								<p class="card-text">
 									<a href="{{ path('app_dashboard_admin_franchise_details', {'id': franchise.id}) }}">{{ franchise.client.clientname }}</a>
 								</p>
-								<p class="card-text">{{ franchise.client.shortDescription }}</p>
-								<p class="card-text">{{ franchise.client.url }}</p>
+								<p class="card-text">Description courte :
+									{{ franchise.client.shortDescription }}</p>
+								<p class="card-text">URL :
+									<a href="http://{{ franchise.client.url }}">{{ franchise.client.url }}</a>
+								</p>
 							</div>
 						</div>
 						<div class="media d-flex mt-3">
