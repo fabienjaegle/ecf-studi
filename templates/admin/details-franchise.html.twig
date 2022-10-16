@@ -27,13 +27,9 @@
 				</div>
 			</div>
 			<div class="card-body d-flex">
-				<div class="col-1">
-					<button type="button" class="btn btn-sm btn-switch {{ franchise.client.active ? 'active' : '' }}" data-toggle="button" aria-pressed="false" autocomplete="off">
-						<div class="handle"></div>
-					</button>
-				</div>
-				<div class="col-11">
-					{{ franchise.client.active ? 'Actif': 'Non actif' }}
+				<div class="form-check form-switch">
+					<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" {{ franchise.client.active ? 'checked' : '' }} disabled>
+					<label class="form-check-label" for="flexSwitchCheckDefault">{{ franchise.client.active ? 'Actif': 'Non actif' }}</label>
 				</div>
 			</div>
 		</div>
@@ -82,15 +78,32 @@
 							</div>
 						</div>
 						<div class="media d-flex mt-3">
-							<div class="align-self-center">
-								<button type="button" class="btn btn-sm btn-switch float-left {{ structure.client.active ? 'active' : '' }}" data-toggle="button" aria-pressed="false" autocomplete="off">
-									<div class="handle"></div>
-								</button>
-							</div>
-							<div class="media-body text-right">
-								<p class="card-text">{{ structure.client.active ? 'Actif': 'Non actif' }}</p>
+							<div class="form-check form-switch">
+								<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" {{ structure.client.active ? 'checked' : '' }} disabled>
+								<label class="form-check-label" for="flexSwitchCheckDefault">{{ structure.client.active ? 'Actif': 'Non actif' }}</label>
 							</div>
 						</div>
+					</div>
+				</div>
+				<div class="form-control">
+					<div class="d-flex justify-content-between">
+						<div></div>
+						<div>
+							<a href="#" data-bs-toggle="collapse" data-bs-target="#permissions-collapse-{{ structure.id }}" aria-expanded="false">
+								Permissions
+								<i class="fa fa-plus"></i>
+							</a>
+						</div>
+
+					</div>
+					<div class="collapse" id="permissions-collapse-{{ structure.id }}">
+
+						{% if structure.client.grants %}
+							TODO Les permissions
+						{% else %}
+							<a href="{{ path('app_dashboard_admin_structure_add_permissions', {'id': structure.id, 'client_id': structure.client.id}) }}" class="btn btn-outline-primary">Ajouter</a>
+						{% endif %}
+
 					</div>
 				</div>
 			</div>

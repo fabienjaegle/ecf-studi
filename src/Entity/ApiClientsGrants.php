@@ -51,9 +51,21 @@ class ApiClientsGrants
         return $this->client;
     }
 
-    public function setClient(string $client_id): self
+    public function setClient(string $client): self
     {
-        $this->client = $client_id;
+        $this->client = $client;
+
+        return $this;
+    }
+
+    public function getClientId(): ?string
+    {
+        return $this->client;
+    }
+
+    public function setClientId(string $client): self
+    {
+        $this->client = $client;
 
         return $this;
     }

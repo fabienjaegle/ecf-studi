@@ -8,6 +8,7 @@ use App\Entity\ApiClientsGrants;
 use App\Entity\ApiInstallPerm;
 use App\Entity\Franchise;
 use App\Entity\Structure;
+use App\Form\ApiClientsGrantsType;
 use App\Form\FranchiseEditType;
 use App\Form\FranchiseType;
 use App\Form\StructureType;
@@ -282,5 +283,31 @@ class AdminDashboardController extends AbstractController
         }
 
         return $realEntities;
+    }
+
+    #[Route('/dashboard/admin/structure/{id}/add/permissions/{client_id}', name: 'app_dashboard_admin_structure_add_permissions', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function add_permissions(Request $request, ApiClientsRepository $apiClientsRepository, ApiClientsGrantsRepository $apiClientsGrantsRepository, EntityManagerInterface $entityManager, int $id, int $client_id): Response
+    {
+        $apiClients = $apiClientsRepository->find($client_id);
+
+        $apiClientsGrants = new ApiClientsGrants();
+        $form = $this->createForm(ApiClientsGrantsType::class, $apiClientsGrants);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $apiClientsGrantsRepository->add($apiClientsGrants, true);
+
+            $apiClientsGrants->setClient($apiClients->getClientId());
+
+            $entityManager->persist($apiClients);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_dashboard_admin_franchise_details', ['id' => $id], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('admin/add-permissions.html.twig', [
+            'form' => $form
+        ]);
     }
 }

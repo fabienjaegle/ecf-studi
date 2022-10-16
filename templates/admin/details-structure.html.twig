@@ -40,13 +40,9 @@
 					</div>
 				</div>
 				<div class="card-body d-flex">
-					<div class="col-1">
-						<button type="button" class="btn btn-sm btn-switch {{ structure.client.active ? 'active' : '' }}" data-toggle="button" aria-pressed="false" autocomplete="off">
-							<div class="handle"></div>
-						</button>
-					</div>
-					<div class="col-11">
-						{{ structure.client.active ? 'Actif': 'Non actif' }}
+					<div class="form-check form-switch">
+						<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" {{ structure.client.active ? 'checked' : '' }} disabled>
+						<label class="form-check-label" for="flexSwitchCheckDefault">{{ structure.client.active ? 'Actif': 'Non actif' }}</label>
 					</div>
 				</div>
 			</div>

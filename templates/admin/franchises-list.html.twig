@@ -33,13 +33,9 @@
 							</div>
 						</div>
 						<div class="media d-flex mt-3">
-							<div class="align-self-center">
-								<button type="button" class="btn btn-sm btn-switch float-left {{ franchise.client.active ? 'active' : '' }}" data-toggle="button" aria-pressed="false" autocomplete="off">
-									<div class="handle"></div>
-								</button>
-							</div>
-							<div class="media-body text-right">
-								<p class="card-text">{{ franchise.client.active ? 'Actif': 'Non actif' }}</p>
+							<div class="form-check form-switch">
+								<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" {{ franchise.client.active ? 'checked' : '' }} disabled>
+								<label class="form-check-label" for="flexSwitchCheckDefault">{{ franchise.client.active ? 'Actif': 'Non actif' }}</label>
 							</div>
 						</div>
 					</div>
