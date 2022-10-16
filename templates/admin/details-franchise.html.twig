@@ -41,8 +41,7 @@
 	<div class="form-control my-3">
 		<form role="search" id="nav-search-form" method="post" action="{{ path('app_dashboard_admin_search') }}">
 			<div class="d-flex justify-content-between">
-				<input class="form-control form-control-dark rounded-0 border-0" id="client_name" name="client_name" type="text" placeholder="Nom du client" aria-label="Nom du client">
-				<input class="form-control form-control-dark rounded-0 border-0" id="client_id" name="client_id" type="text" placeholder="ID du client" aria-label="ID du client">
+				<input class="form-control form-control-dark rounded-0 border-0" id="branch_id" name="branch_id" type="text" placeholder="branch_id" aria-label="Nom du client">
 				<div class="d-flex justify-content-between">
 					<a href="#" class="btn btn-outline-primary">Toutes</a>
 				</div>
@@ -67,7 +66,8 @@
 							</div>
 							<div class="media-body text-right mx-3">
 								<p class="card-text">client_id:
-									{{ structure.client.clientId }}</p>
+									<a href="{{ path('app_dashboard_admin_structure_details', {'id': franchise.id, 'structure_id': structure.id}) }}">{{ structure.client.clientId }}</a>
+								</p>
 								<p class="card-text">install_id:
 									{% if structure.client.grants %}
 										{{ structure.client.grants.installId }}
@@ -81,7 +81,16 @@
 								</p>
 							</div>
 						</div>
-
+						<div class="media d-flex mt-3">
+							<div class="align-self-center">
+								<button type="button" class="btn btn-sm btn-switch float-left {{ structure.client.active ? 'active' : '' }}" data-toggle="button" aria-pressed="false" autocomplete="off">
+									<div class="handle"></div>
+								</button>
+							</div>
+							<div class="media-body text-right">
+								<p class="card-text">{{ structure.client.active ? 'Actif': 'Non actif' }}</p>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -30,10 +30,12 @@ class ApiClientsType extends AbstractType
             ])
             ->add('logo_url', TextType::class, [
                 'label' => 'URL du logo',
+                'required' => false,
                 'attr' => ['class' => 'form-control']
             ])
             ->add('url', TextType::class, [
                 'label' => 'URL',
+                'required' => false,
                 'attr' => ['class' => 'form-control']
             ])
             ->add('dpo', TextType::class, [

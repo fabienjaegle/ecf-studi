@@ -38,7 +38,7 @@ class FranchiseEditType extends AbstractType
                     'Non' => false,
                 ],
                 'required' => true,
-            ]);
+            ])->add('client', ApiClientsType::class, []);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

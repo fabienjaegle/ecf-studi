@@ -33,10 +33,10 @@ class ApiClients
     #[ORM\Column(type: Types::TEXT)]
     private ?string $full_description = null;
 
-    #[ORM\Column(length: 200)]
+    #[ORM\Column(length: 200, nullable: true)]
     private ?string $logo_url = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 100, nullable: true)]
     private ?string $url = null;
 
     #[ORM\Column(length: 100)]
