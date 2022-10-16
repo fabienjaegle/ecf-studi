@@ -29,9 +29,9 @@ class ApiClientsGrants
     #[ORM\Column]
     private ?int $branch_id = null;
 
-    #[ORM\OneToOne(targetEntity: ApiClients::class, cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(name: 'client_id', nullable: false)]
-    private ?ApiClients $client = null;
+    #[ORM\OneToOne(targetEntity: ApiClients::class, inversedBy: 'grants')]
+    #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'client_id')]
+    private $client = null;
 
     //#[ORM\OneToMany(mappedBy: 'client_id', targetEntity: ApiInstallPerm::class, orphanRemoval: true)]
     //private Collection $apiInstallPerms;
@@ -46,14 +46,14 @@ class ApiClientsGrants
         return $this->id;
     }
 
-    public function getClient(): ?ApiClients
+    public function getClient(): ?string
     {
         return $this->client;
     }
 
-    public function setClient(ApiClients $client): self
+    public function setClient(string $client_id): self
     {
-        $this->client = $client;
+        $this->client = $client_id;
 
         return $this;
     }
@@ -102,6 +102,18 @@ class ApiClientsGrants
     public function setBranchId(int $branch_id): self
     {
         $this->branch_id = $branch_id;
+
+        return $this;
+    }
+
+    public function getApiClients(): ?ApiClients
+    {
+        return $this->apiClients;
+    }
+
+    public function setApiClients(ApiClients $apiClients): self
+    {
+        $this->apiClients = $apiClients;
 
         return $this;
     }

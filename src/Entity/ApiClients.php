@@ -48,19 +48,22 @@ class ApiClients
     #[ORM\Column(length: 200)]
     private ?string $commercial_contact = null;
 
+    #[ORM\OneToOne(targetEntity: ApiClientsGrants::class, mappedBy: 'client')]
+    private $grants;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getClientId(): ?string
+    public function getGrants(): ?ApiClientsGrants
     {
-        return $this->client_id;
+        return $this->grants;
     }
 
-    public function setClientId(string $client_id): self
+    public function setGrants(ApiClientsGrants $grants): self
     {
-        $this->client_id = $client_id;
+        $this->grants = $grants;
 
         return $this;
     }
@@ -181,23 +184,6 @@ class ApiClients
     public function setCommercialContact(string $commercial_contact): self
     {
         $this->commercial_contact = $commercial_contact;
-
-        return $this;
-    }
-
-    public function getApiClientsGrants(): ?ApiClientsGrants
-    {
-        return $this->apiClientsGrants;
-    }
-
-    public function setApiClientsGrants(ApiClientsGrants $apiClientsGrants): self
-    {
-        // set the owning side of the relation if necessary
-        if ($apiClientsGrants->getClient() !== $this) {
-            $apiClientsGrants->setClient($this);
-        }
-
-        $this->apiClientsGrants = $apiClientsGrants;
 
         return $this;
     }

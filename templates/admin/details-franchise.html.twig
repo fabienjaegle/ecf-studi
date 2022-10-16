@@ -58,7 +58,33 @@
 	</div>
 	<div class="row">
 		{% for structure in structures %}
-			{{dump(structure)}}
+			<div class="col-xl-12 col-sm-12 col-12 my-3">
+				<div class="card">
+					<div class="card-body">
+						<div class="media d-flex">
+							<div class="align-self-center">
+								<img class="img-fluid float-left" width="90" height="90" src="{{ structure.client.logourl ? structure.client.logourl : asset('assets/img/no-logo.png') }}" alt="{{ structure.client.clientname }}"/>
+							</div>
+							<div class="media-body text-right mx-3">
+								<p class="card-text">client_id:
+									{{ structure.client.id }}</p>
+								<p class="card-text">install_id:
+									{% if structure.client.grants %}
+										{{ structure.client.grants.installId }}
+									{% endif %}
+								</p>
+
+								<p class="card-text">branch_id:
+									{% if structure.client.grants %}
+										{{ structure.client.grants.branchId }}
+									{% endif %}
+								</p>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
 		{% else %}
 			<p>Aucune structure associée pour le moment.</p>
 		{% endfor %}
