@@ -4,55 +4,54 @@
 {% endblock %}
 
 {% block body %}
-	<div class="container">
-		<div class="col-6 m-5">
-			{{ form_start(form) }}
-			<div class="row g-3">
-				<div class="col-12">
-					{{ form_label(form.client_id) }}
-					{{ form_widget(form.client_id) }}
 
-					<div class="invalid-feedback">
-						{{ form_errors(form.client_id) }}
-					</div>
+	<div class="row">
+		{{ form_start(form) }}
+		<div class="col">
+			<div class="col-12">
+				{{ form_label(form.client_id) }}
+				{{ form_widget(form.client_id) }}
+
+				<div class="invalid-feedback">
+					{{ form_errors(form.client_id) }}
 				</div>
-				<div class="col-12">
-					{{ form_label(form.install_id) }}
-					{{ form_widget(form.install_id) }}
-
-					<div class="invalid-feedback">
-						{{ form_errors(form.install_id) }}
-					</div>
-				</div>
-				<div class="col-12">
-					{{ form_label(form.active) }}
-					{{ form_widget(form.active) }}
-
-					<div class="invalid-feedback">
-						{{ form_errors(form.active) }}
-					</div>
-				</div>
-				<div class="col-12">
-					{{ form_label(form.branch_id) }}
-					{{ form_widget(form.branch_id) }}
-
-					<div class="invalid-feedback">
-						{{ form_errors(form.branch_id) }}
-					</div>
-				</div>
-
-				<button class="btn btn-outline-primary ml-5 mt-2">Ajouter</button>
 			</div>
-			{{ form_end(form) }}
-		</div>
-		<div class="col-6 m-5">
-			<div class="row">
-				<div class="form-check form-switch">
-					<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-					<label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label>
+			<div class="col-12">
+				{{ form_label(form.install_id) }}
+				{{ form_widget(form.install_id) }}
+
+				<div class="invalid-feedback">
+					{{ form_errors(form.install_id) }}
+				</div>
+			</div>
+			<div class="col-12">
+				{{ form_label(form.active) }}
+				{{ form_widget(form.active) }}
+
+				<div class="invalid-feedback">
+					{{ form_errors(form.active) }}
+				</div>
+			</div>
+			<div class="col-12">
+				{{ form_label(form.branch_id) }}
+				{{ form_widget(form.branch_id) }}
+
+				<div class="invalid-feedback">
+					{{ form_errors(form.branch_id) }}
 				</div>
 			</div>
 		</div>
+		<div class="col">
+			<div class="col-12">
+				{{ form_label(form.perms) }}
+				{{ form_widget(form.perms) }}
+
+				<div class="invalid-feedback">
+					{{ form_errors(form.perms) }}
+				</div>
+			</div>
+		</div>
+		{{ form_end(form) }}
 	</div>
-
-{% endblock %}
+	<button class="btn btn-outline-primary ml-5 mt-2">Ajouter</button>
+</div>{% endblock %}

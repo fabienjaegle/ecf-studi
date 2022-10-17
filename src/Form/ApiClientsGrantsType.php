@@ -22,6 +22,9 @@ class ApiClientsGrantsType extends AbstractType
             ->add('active', TextType::class, [
                 'attr' => ['class' => 'form-control']
             ])
+            ->add('perms', ApiInstallPermType::class, [
+                'attr' => ['class' => 'form-control']
+            ])
             ->add('branch_id', TextType::class, [
                 'attr' => ['class' => 'form-control']
             ]);

@@ -14,14 +14,11 @@ class ApiInstallPerm
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 100)]
-    private ?string $branch_id = null;
-
     #[ORM\Column]
     private ?int $install_id = null;
 
     #[ORM\ManyToOne(inversedBy: 'apiInstallPerms')]
-    #[ORM\JoinColumn(nullable: false, onDelete: 'cascade')]
+    #[ORM\JoinColumn(nullable: false, referencedColumnName: 'branch_id', onDelete: 'cascade')]
     private ?ApiClientsGrants $client = null;
 
     #[ORM\Column]
