@@ -1,12 +1,13 @@
 {% extends 'admin.html.twig' %}
 
 {% block body %}
+	<a href="{{ path('app_dashboard_admin_franchise_details', {'id': franchise_id}) }}" role="button" class="btn btn-success mt-3">Retour</a>
+
 	<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
 		<h2>Détails de la structure :
 			{{ structure.name }}</h2>
 		<div class="btn-toolbar mb-2 mb-md-0">
 			<div class="d-flex">
-				<a href="{{ path('app_dashboard_admin_franchise_details', {'id': franchise_id}) }}" class="btn btn-outline-success">Retour</a>
 				<a href="{{ path('app_dashboard_edit_structure', {'id': structure.id}) }}" class="btn btn-outline-primary">Modifier</a>
 				{{ include('structure/_delete_form.html.twig') }}
 			</div>

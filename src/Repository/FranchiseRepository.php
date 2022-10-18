@@ -39,6 +39,38 @@ class FranchiseRepository extends ServiceEntityRepository
         }
     }
 
+    public function getFranchises($value, $isActive = null): array
+    {
+        $queryBuilder = $this->createQueryBuilder('f')
+            ->orderBy('f.id', 'ASC')
+            ->andWhere('f.domain = :domain')
+            ->setParameter('domain', $value);
+
+        if ($isActive) {
+            $queryBuilder->andWhere('f.isActive = :isActive')
+                ->setParameter('isActive', $isActive);
+        }
+
+        return $queryBuilder
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getInactiveFranchises($value): array
+    {
+        $queryBuilder = $this->createQueryBuilder('f')
+            ->orderBy('f.id', 'ASC')
+            ->andWhere('f.isActive = 0')
+            ->andWhere('f.domain = :domain')
+            ->setParameter('domain', $value);
+
+        return $queryBuilder
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
+
     /**
      * @return Franchise[] Returns an array of Franchise objects
      */

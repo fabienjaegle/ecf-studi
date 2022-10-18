@@ -11,15 +11,15 @@
 				<li class="nav-item px-lg-4">
 					<a class="nav-link text-uppercase active" href="{{ path('app_home')}}">Accueil</a>
 				</li>
-				<li class="nav-item px-lg-4">
-					<a class="nav-link text-uppercase" href="evenements.html">&Eacute;vénements</a>
-				</li>
+				<!--<li class="nav-item px-lg-4">
+									<a class="nav-link text-uppercase" href="evenements.html">&Eacute;vénements</a>
+								</li>-->
 			</ul>
 
 			{% if app.user %}
 				<span class="navbar-text">
 					Bonjour,
-					{{ app.user.name }}
+					<a href="/dashboard/admin">{{ app.user.name }}</a>
 					&nbsp;
 					<a class="btn btn-outline-success" href="{{ path('app_logout') }}">Se déconnecter</a>
 				</span>

@@ -42,7 +42,7 @@ class StructureRepository extends ServiceEntityRepository
     /**
      * @return Structure[] Returns an array of Structure objects
      */
-    public function findDetails($value): array
+    public function findDetails($value, $isActive = null): array
     {
         $entityManager = $this->getEntityManager();
 
@@ -54,6 +54,10 @@ class StructureRepository extends ServiceEntityRepository
             ->leftJoin('c.grants', 'g')
             ->where('s.franchise = :franchise')
             ->setParameter('franchise', $value);
+
+        if ($isActive) {
+            $qb->andWhere('s.isActive = :isActive')->setParameter('isActive', $isActive);
+        }
 
         $query = $qb->getQuery();
         $results = $query->getResult();

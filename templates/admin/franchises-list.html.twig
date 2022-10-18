@@ -8,8 +8,9 @@
 				<input class="form-control form-control-dark rounded-0 border-0" id="client_id" name="client_id" type="text" placeholder="ID du client" aria-label="ID du client">
 			</div>
 			<div class="btn-group me-2">
-				<a href="#" class="btn btn-outline-primary">Actif</a>
-				<a href="#" class="btn btn-outline-primary">Non actif</a>
+				{% set route_name = app.request.attributes.get('_route') %}
+				<a href="{{ path('app_dashboard_admin_filter_active_franchises') }}" {% if route_name == "app_dashboard_admin_filter_active_franchises" %} class="active btn btn-outline-primary" {% else %} class="btn btn-outline-primary" {% endif %}>Actif</a>
+				<a href="{{ path('app_dashboard_admin_filter_inactive_franchises') }}" {% if route_name == "app_dashboard_admin_filter_inactive_franchises" %} class="active btn btn-outline-primary" {% else %} class="btn btn-outline-primary" {% endif %}>Non actif</a>
 			</div>
 		</form>
 		<hr>

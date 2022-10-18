@@ -140,6 +140,30 @@ class AdminDashboardController extends AbstractController
         ]);
     }
 
+    #[Route('/dashboard/admin/franchise/{id}/active', name: 'app_dashboard_admin_filter_active_structures', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function show_active_franchise(FranchiseRepository $franchiseRepository, StructureRepository $structureRepository, int $id): Response
+    {
+        $franchise = $franchiseRepository->find($id);
+        $structures = $structureRepository->findDetails($franchise, true);
+
+        return $this->render('admin/details-franchise.html.twig', [
+            'franchise' => $franchise,
+            'structures' => $structures
+        ]);
+    }
+
+    #[Route('/dashboard/admin/franchise/{id}/inactive', name: 'app_dashboard_admin_filter_inactive_structures', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function show_inactive_franchise(FranchiseRepository $franchiseRepository, StructureRepository $structureRepository, int $id): Response
+    {
+        $franchise = $franchiseRepository->find($id);
+        $structures = $structureRepository->findDetails($franchise, false);
+
+        return $this->render('admin/details-franchise.html.twig', [
+            'franchise' => $franchise,
+            'structures' => $structures
+        ]);
+    }
+
     #[Route('/dashboard/admin/franchise/{id}/edit', name: 'app_dashboard_admin_edit_franchise', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function edit_franchise(Request $request, int $id, FranchiseRepository $franchiseRepository): Response
     {
@@ -309,5 +333,33 @@ class AdminDashboardController extends AbstractController
         return $this->renderForm('admin/add-permissions.html.twig', [
             'form' => $form
         ]);
+    }
+
+    #[Route('/dashboard/admin/franchises/list/active', name: 'app_dashboard_admin_filter_active_franchises', methods: ['GET'])]
+    public function filter_active(FranchiseRepository $franchiseRepository): Response
+    {
+        $domain = $this->security->getUser();
+
+        $franchises = $franchiseRepository->getFranchises($domain, true);
+
+        if ($domain instanceof Admin) {
+            return $this->render('admin/franchises-list.html.twig', [
+                'franchises' => $franchises
+            ]);
+        }
+    }
+
+    #[Route('/dashboard/admin/franchises/list/inactive', name: 'app_dashboard_admin_filter_inactive_franchises', methods: ['GET'])]
+    public function filter_inactive(FranchiseRepository $franchiseRepository): Response
+    {
+        $domain = $this->security->getUser();
+
+        $franchises = $franchiseRepository->getFranchises($domain, false);
+
+        if ($domain instanceof Admin) {
+            return $this->render('admin/franchises-list.html.twig', [
+                'franchises' => $franchises
+            ]);
+        }
     }
 }
