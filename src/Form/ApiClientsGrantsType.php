@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\ApiClientsGrants;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -16,7 +17,7 @@ class ApiClientsGrantsType extends AbstractType
             ->add('client_id', TextType::class, [
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('install_id', TextType::class, [
+            ->add('install_id', IntegerType::class, [
                 'attr' => ['class' => 'form-control']
             ])
             ->add('active', TextType::class, [
@@ -25,7 +26,7 @@ class ApiClientsGrantsType extends AbstractType
             ->add('perms', ApiInstallPermType::class, [
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('branch_id', TextType::class, [
+            ->add('branch_id', IntegerType::class, [
                 'attr' => ['class' => 'form-control']
             ]);
     }
