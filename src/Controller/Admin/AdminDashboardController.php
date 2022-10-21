@@ -18,6 +18,8 @@ use App\Repository\ApiClientsRepository;
 use App\Repository\ApiInstallPermRepository;
 use App\Repository\FranchiseRepository;
 use App\Repository\StructureRepository;
+use App\Service\JWTService;
+use App\Service\SendMailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -52,7 +54,7 @@ class AdminDashboardController extends AbstractController
     }
 
     #[Route('/dashboard/admin/franchise/new', name: 'app_dashboard_admin_new_franchise', methods: ['GET', 'POST'])]
-    public function new_franchise(Request $request, FranchiseRepository $franchiseRepository, ApiClientsRepository $apiClientsRepository, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function new_franchise(Request $request, JWTService $jWTService, SendMailService $sendMailService, FranchiseRepository $franchiseRepository, ApiClientsRepository $apiClientsRepository, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $franchise = new Franchise();
         $form = $this->createForm(FranchiseType::class, $franchise);
@@ -86,7 +88,7 @@ class AdminDashboardController extends AbstractController
 
             // On génère le JWT de l'utilisateur
             // On crée le Header
-            /*$header = [
+            $header = [
                 'typ' => 'JWT',
                 'alg' => 'HS256'
             ];
@@ -97,15 +99,15 @@ class AdminDashboardController extends AbstractController
             ];
 
             // On génère le token
-            $token = $jwt->generate($header, $payload, $this->getParameter('app.jwtsecret'));
+            $token = $jWTService->generate($header, $payload, $this->getParameter('app.jwtsecret'));
 
-            $mail->send(
+            $sendMailService->send(
                 'no-reply@fj-fitness.fr',
                 $franchise->getEmail(),
                 'Activation de votre compte sur le site FJ Fitness',
                 'register',
                 compact('franchise', 'token')
-            );*/
+            );
 
             return $this->redirectToRoute('app_dashboard_admin_franchises_list', [], Response::HTTP_SEE_OTHER);
         }
