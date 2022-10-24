@@ -332,7 +332,7 @@ class AdminDashboardController extends AbstractController
     {
         $domain = $this->security->getUser();
 
-        $franchises = $franchiseRepository->getFranchises($domain, true);
+        $franchises = $franchiseRepository->getActiveFranchises($domain);
 
         if ($domain instanceof Admin) {
             return $this->render('admin/franchises-list.html.twig', [
@@ -346,7 +346,7 @@ class AdminDashboardController extends AbstractController
     {
         $domain = $this->security->getUser();
 
-        $franchises = $franchiseRepository->getFranchises($domain, false);
+        $franchises = $franchiseRepository->getInactiveFranchises($domain);
 
         if ($domain instanceof Admin) {
             return $this->render('admin/franchises-list.html.twig', [

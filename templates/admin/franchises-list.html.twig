@@ -34,16 +34,19 @@
 							</div>
 						</div>
 						<div class="media d-flex mt-3">
-							<div class="form-check form-switch">
-								<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" {{ franchise.client.active ? 'checked' : '' }} disabled>
-								<label class="form-check-label" for="flexSwitchCheckDefault">{{ franchise.client.active ? 'Actif': 'Non actif' }}</label>
-							</div>
+							<label class="toggle-switchy" for="franchise_{{franchise.id}}" data-size="sm" data-style="rounded" data-label="right">
+								<input {{ franchise.active ? 'checked=""' : '' }} disabled onclick="clickFranchise({{franchise.client.active}}, '{{franchise.client.clientName}}')" type="checkbox" id="franchise_{{franchise.id}}">
+								<span class="toggle">
+									<span class="switch"></span>
+								</span>
+								<span class="label">{{ franchise.client.active ? 'Actif': 'Non actif' }}</span>
+							</label>
 						</div>
 					</div>
 				</div>
 			</div>
 		{% else %}
-			<p>Aucune franchise pour le moment.</p>
+			<p class="text-center">Aucune franchise.</p>
 		{% endfor %}
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -58,7 +61,6 @@ var entitySelector = $("#result").html('');
 if (value.length >= minlength || value.length == 0) {
 if (searchRequest != null) 
 searchRequest.abort();
-
 
 
 /* Ajax est lancé lors du remplissage du champ texte dont l’id est « search » pour faire la recherche */

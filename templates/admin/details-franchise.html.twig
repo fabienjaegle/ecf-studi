@@ -127,12 +127,18 @@
 		function clickFranchise(active, clientname) {
 console.log(active);
 if (active === 0) {
-if (confirm('Etes-vous sûr de vouloir activer l\'intégration de ' + clientname + ' à TOUS LES CLUBS ?')) {}
+if (confirm('Etes-vous sûr de vouloir activer l\'intégration de ' + clientname + ' à TOUS LES CLUBS ?')) {
 document.getElementById('franchiseForm').submit();
 } else {
-if (confirm('Etes-vous sûr de vouloir désactiver l\'intégration de ' + clientname + ' à TOUS LES CLUBS ?')) {}
+location.reload();
 }
+} else {
+if (confirm('Etes-vous sûr de vouloir désactiver l\'intégration de ' + clientname + ' à TOUS LES CLUBS ?')) {
 document.getElementById('franchiseForm').submit();
+} else {
+location.reload();
+}
+}
 }
 
 function clickStructure(active, clientname) {}

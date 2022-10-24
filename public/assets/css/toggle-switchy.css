@@ -17,10 +17,14 @@ Releases:	https://github.com/adamculpepper/toggle-switchy/releases
 }
 
 .toggle-switchy>input+.toggle:before {
+    font-family: 'Bahnschrift';
+    font-weight: 600;
     content: 'ON';
 }
 
 .toggle-switchy>input+.toggle:after {
+    font-family: 'Bahnschrift';
+    font-weight: 600;
     content: 'OFF';
 }
 
