@@ -27,10 +27,15 @@
 				</div>
 			</div>
 			<div class="card-body d-flex">
-				<div class="form-check form-switch">
-					<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" {{ franchise.client.active ? 'checked' : '' }} disabled>
-					<label class="form-check-label" for="flexSwitchCheckDefault">{{ franchise.client.active ? 'Actif': 'Non actif' }}</label>
-				</div>
+				<form method="post" action="{{ path('app_dashboard_admin_franchise_setActive', {'id': franchise.id}) }}" id="franchiseForm">
+					<label class="toggle-switchy" for="franchise_{{franchise.id}}" data-size="sm" data-style="rounded" data-label="right">
+						<input {{ franchise.active ? 'checked=""' : '' }} onclick="clickFranchise({{franchise.client.active}}, '{{franchise.client.clientName}}')" type="checkbox" id="franchise_{{franchise.id}}">
+						<span class="toggle">
+							<span class="switch"></span>
+						</span>
+						<span class="label">{{ franchise.client.active ? 'Actif': 'Non actif' }}</span>
+					</label>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -45,11 +50,12 @@
 			</div>
 			<div class="d-flex justify-content-between">
 				<div class="btn-group me-2">
-
 					<a href="{{ path('app_dashboard_admin_filter_active_structures', {'id': franchise.id}) }}" {% if route_name == "app_dashboard_admin_filter_active_structures" %} class="active btn btn-outline-primary" {% else %} class="btn btn-outline-primary" {% endif %}>Actif</a>
 					<a href="{{ path('app_dashboard_admin_filter_inactive_structures', {'id': franchise.id}) }}" {% if route_name == "app_dashboard_admin_filter_inactive_structures" %} class="active btn btn-outline-primary" {% else %} class="btn btn-outline-primary" {% endif %}>Non actif</a>
 				</div>
-				<a href="{{ path('app_dashboard_admin_new_structure', {'id': franchise.id}) }}" class="btn btn-primary">Ajouter</a>
+				{% if franchise.active %}
+					<a href="{{ path('app_dashboard_admin_new_structure', {'id': franchise.id}) }}" class="btn btn-primary">Ajouter</a>
+				{% endif %}
 			</div>
 		</form>
 	</div>
@@ -80,10 +86,15 @@
 							</div>
 						</div>
 						<div class="media d-flex mt-3">
-							<div class="form-check form-switch">
-								<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" {{ structure.client.active ? 'checked' : '' }} disabled>
-								<label class="form-check-label" for="flexSwitchCheckDefault">{{ structure.client.active ? 'Actif': 'Non actif' }}</label>
-							</div>
+							<form method="post" action="{{ path('app_dashboard_admin_structure_setActive', {'id': franchise.id, 'structure_id': structure.id}) }}" id="structureForm">
+								<label class="toggle-switchy" for="structure_{{structure.id}}" data-size="sm" data-style="rounded" data-label="right">
+									<input {{ structure.active ? 'checked=""' : '' }} {{franchise.active ? '' : 'disabled' }} onclick="clickStructure({{structure.client.active}}, '{{structure.client.clientName}}')" type="checkbox" id="structure_{{structure.id}}">
+									<span class="toggle">
+										<span class="switch"></span>
+									</span>
+									<span class="label">{{ structure.client.active ? 'Actif': 'Non actif' }}</span>
+								</label>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -96,16 +107,15 @@
 								<i class="fa fa-plus"></i>
 							</a>
 						</div>
-
 					</div>
 					<div class="collapse" id="permissions-collapse-{{ structure.id }}">
-
 						{% if structure.client.grants %}
 							TODO Les permissions
 						{% else %}
-							<a href="{{ path('app_dashboard_admin_structure_add_permissions', {'id': structure.id, 'client_id': structure.client.id}) }}" class="btn btn-outline-primary">Ajouter</a>
+							{% if franchise.active %}
+								<a href="{{ path('app_dashboard_admin_structure_add_permissions', {'id': structure.id, 'client_id': structure.client.id}) }}" class="btn btn-outline-primary">Ajouter</a>
+							{% endif %}
 						{% endif %}
-
 					</div>
 				</div>
 			</div>
@@ -113,4 +123,18 @@
 			<p>Aucune structure associée pour le moment.</p>
 		{% endfor %}
 	</div>
+	<script>
+		function clickFranchise(active, clientname) {
+console.log(active);
+if (active === 0) {
+if (confirm('Etes-vous sûr de vouloir activer l\'intégration de ' + clientname + ' à TOUS LES CLUBS ?')) {}
+document.getElementById('franchiseForm').submit();
+} else {
+if (confirm('Etes-vous sûr de vouloir désactiver l\'intégration de ' + clientname + ' à TOUS LES CLUBS ?')) {}
+}
+document.getElementById('franchiseForm').submit();
+}
+
+function clickStructure(active, clientname) {}
+	</script>
 {% endblock %}

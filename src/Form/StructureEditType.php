@@ -29,15 +29,6 @@ class StructureEditType extends AbstractType
             ])
             ->add('email', EmailType::class, [
                 'attr' => ['class' => 'form-control']
-            ])
-            ->add('is_active', ChoiceType::class, [
-                'attr' => ['class' => 'form-select'],
-                'choices'  => [
-                    '' => null,
-                    'Oui' => true,
-                    'Non' => false,
-                ],
-                'required' => true,
             ]);
     }
 

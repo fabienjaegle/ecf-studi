@@ -187,16 +187,6 @@ class AdminDashboardController extends AbstractController
         ]);
     }
 
-    #[Route('/dashboard/admin/franchise/{id}', name: 'app_dashboard_admin_delete_franchise', methods: ['POST'])]
-    public function delete_franchise(Request $request, Franchise $franchise, FranchiseRepository $franchiseRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete' . $franchise->getId(), $request->request->get('_token'))) {
-            $franchiseRepository->remove($franchise, true);
-        }
-
-        return $this->redirectToRoute('app_dashboard_franchise_index', [], Response::HTTP_SEE_OTHER);
-    }
-
     #[Route('/dashboard/admin/franchise/{id}/structure/new', name: 'app_dashboard_admin_new_structure', methods: ['GET', 'POST'])]
     public function new_structure(Request $request, FranchiseRepository $franchiseRepository, StructureRepository $structureRepository, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, int $id): Response
     {
@@ -363,5 +353,31 @@ class AdminDashboardController extends AbstractController
                 'franchises' => $franchises
             ]);
         }
+    }
+
+    #[Route('/dashboard/admin/franchise/{id}', name: 'app_dashboard_admin_franchise_setActive')]
+    public function active_franchise(FranchiseRepository $franchiseRepository, EntityManagerInterface $entityManager, int $id): Response
+    {
+        $franchise = $franchiseRepository->find($id);
+
+        $franchise->setIsActive(!$franchise->isActive());
+        $franchise->getClient()->setActive($franchise->isActive() ? '1' : '0');
+        $entityManager->persist($franchise);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_dashboard_admin_franchise_details', ['id' => $id]);
+    }
+
+    #[Route('/dashboard/admin/franchise/{id}/structure/{structure_id}', name: 'app_dashboard_admin_structure_setActive', requirements: ['id' => '\d+'])]
+    public function active_structure(StructureRepository $structureRepository, EntityManagerInterface $entityManager, int $id, int $structure_id): Response
+    {
+        $structure = $structureRepository->find($structure_id);
+
+        $structure->setIsActive(!$structure->isActive());
+        $structure->getClient()->setActive($structure->isActive() ? '1' : '0');
+        $entityManager->persist($structure);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_dashboard_admin_franchise_details', ['id' => $id]);
     }
 }
