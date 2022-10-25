@@ -44,22 +44,20 @@
 		<form role="search" id="nav-search-form" method="post" action="{{ path('app_dashboard_admin_search') }}">
 			<div class="d-flex justify-content-between">
 				<input class="form-control form-control-dark rounded-0 border-0" id="branch_id" name="branch_id" type="text" placeholder="branch_id" aria-label="Nom du client">
-				<div class="d-flex justify-content-between">
-					<a href="{{ path('app_dashboard_admin_franchise_details', {'id': franchise.id}) }}" {% if route_name == "app_dashboard_admin_franchise_details" %} class="active btn btn-outline-primary" {% else %} class="btn btn-outline-primary" {% endif %}>Toutes</a>
-				</div>
 			</div>
 			<div class="d-flex justify-content-between">
 				<div class="btn-group me-2">
 					<a href="{{ path('app_dashboard_admin_filter_active_structures', {'id': franchise.id}) }}" {% if route_name == "app_dashboard_admin_filter_active_structures" %} class="active btn btn-outline-primary" {% else %} class="btn btn-outline-primary" {% endif %}>Actif</a>
 					<a href="{{ path('app_dashboard_admin_filter_inactive_structures', {'id': franchise.id}) }}" {% if route_name == "app_dashboard_admin_filter_inactive_structures" %} class="active btn btn-outline-primary" {% else %} class="btn btn-outline-primary" {% endif %}>Non actif</a>
 				</div>
-				{% if franchise.active %}
-					<a href="{{ path('app_dashboard_admin_new_structure', {'id': franchise.id}) }}" class="btn btn-primary">Ajouter</a>
-				{% endif %}
+				<a href="{{ path('app_dashboard_admin_franchise_details', {'id': franchise.id}) }}" {% if route_name == "app_dashboard_admin_franchise_details" %} class="active btn btn-outline-primary" {% else %} class="btn btn-outline-primary" {% endif %}>Toutes</a>
 			</div>
 		</form>
 	</div>
 	<div class="row">
+		<div class="d-flex justify-content-end">
+			<a href="{{ path('app_dashboard_admin_new_structure', {'id': franchise.id}) }}" class="btn btn-primary">Ajouter</a>
+		</div>
 		{% for structure in structures %}
 			<div class="col-xl-12 col-sm-12 col-12 my-3">
 				<div class="card">
@@ -70,7 +68,7 @@
 							</div>
 							<div class="media-body text-right mx-3">
 								<p class="card-text">client_id:
-									<a href="{{ path('app_dashboard_admin_structure_details', {'id': franchise.id, 'structure_id': structure.id}) }}">{{ structure.client.clientId }}</a>
+									{{ structure.client.id }}
 								</p>
 								<p class="card-text">install_id:
 									{% if structure.client.grants %}
@@ -83,6 +81,8 @@
 										{{ structure.client.grants.branchId }}
 									{% endif %}
 								</p>
+
+								<a href="{{ path('app_dashboard_admin_structure_details', {'id': franchise.id, 'structure_id': structure.id}) }}">Plus d'information</a>
 							</div>
 						</div>
 						<div class="media d-flex mt-3">
@@ -120,7 +120,7 @@
 				</div>
 			</div>
 		{% else %}
-			<p>Aucune structure associée pour le moment.</p>
+			<p>Aucune structure associée à la franchise pour le moment.</p>
 		{% endfor %}
 	</div>
 	<script>
@@ -141,6 +141,7 @@ location.reload();
 }
 }
 
-function clickStructure(active, clientname) {}
+function clickStructure(active, clientname) { // TODO
+}
 	</script>
 {% endblock %}
