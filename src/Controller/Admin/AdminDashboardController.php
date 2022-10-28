@@ -9,6 +9,7 @@ use App\Entity\ApiInstallPerm;
 use App\Entity\Franchise;
 use App\Entity\Structure;
 use App\Form\ApiClientsGrantsType;
+use App\Form\ApiInstallPermType;
 use App\Form\FranchiseEditType;
 use App\Form\FranchiseType;
 use App\Form\StructureType;
@@ -125,14 +126,19 @@ class AdminDashboardController extends AbstractController
     }
 
     #[Route('/dashboard/admin/franchise/{id}', name: 'app_dashboard_admin_franchise_details', methods: ['GET'], requirements: ['id' => '\d+'])]
-    public function show_franchise(FranchiseRepository $franchiseRepository, StructureRepository $structureRepository, int $id): Response
+    public function show_franchise(Request $request, FranchiseRepository $franchiseRepository, StructureRepository $structureRepository, int $id): Response
     {
         $franchise = $franchiseRepository->find($id);
         $structures = $structureRepository->findDetails($franchise);
 
-        return $this->render('admin/details-franchise.html.twig', [
+        $perm = new ApiInstallPerm();
+        $form = $this->createForm(ApiInstallPermType::class, $perm);
+        $form->handleRequest($request);
+
+        return $this->renderForm('admin/details-franchise.html.twig', [
             'franchise' => $franchise,
-            'structures' => $structures
+            'structures' => $structures,
+            'form' => $form
         ]);
     }
 

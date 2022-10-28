@@ -88,7 +88,7 @@
 						<div class="media d-flex mt-3">
 							<form method="post" action="{{ path('app_dashboard_admin_structure_setActive', {'id': franchise.id, 'structure_id': structure.id}) }}" id="structureForm">
 								<label class="toggle-switchy" for="structure_{{structure.id}}" data-size="sm" data-style="rounded" data-label="right">
-									<input {{ structure.active ? 'checked=""' : '' }} {{franchise.active ? '' : 'disabled' }} onclick="clickStructure({{structure.client.active}}, '{{structure.client.clientName}}')" type="checkbox" id="structure_{{structure.id}}">
+									<input {{ structure.active ? 'checked=""' : '' }} {{franchise.active ? '' : 'disabled' }} onclick="clickStructure({{structure.client.active}}, '{{structure.client.clientName}}', {{franchise.client.grants}})" type="checkbox" id="structure_{{structure.id}}">
 									<span class="toggle">
 										<span class="switch"></span>
 									</span>
@@ -113,7 +113,41 @@
 							TODO Les permissions
 						{% else %}
 							{% if franchise.active %}
-								<a href="{{ path('app_dashboard_admin_structure_add_permissions', {'id': structure.id, 'client_id': structure.client.id}) }}" class="btn btn-outline-primary">Ajouter</a>
+								{{ form_start(form) }}
+								<!--<div class="row">
+																	<div class="col-6">
+																		<div class="my-3">
+																			<label class="toggle-switchy" for="structure_{{structure.id}}" data-size="sm" data-style="rounded" data-label="right">
+																				<input {{ structure.active ? 'checked=""' : '' }} {{structure.active ? '' : 'disabled' }} onclick="clickPermission({{structure.client.active}}, '{{structure.client.clientName}}')" type="checkbox" id="structure_{{structure.id}}">
+																				<span class="toggle">
+																					<span class="switch"></span>
+																				</span>
+																				<span class="label">Members_read</span>
+																			</label>
+																		</div>
+																		<div>
+																			<label class="toggle-switchy" for="structure_{{structure.id}}" data-size="sm" data-style="rounded" data-label="right">
+																				<input {{ structure.active ? 'checked=""' : '' }} {{structure.active ? '' : 'disabled' }} onclick="clickPermission({{structure.client.active}}, '{{structure.client.clientName}}')" type="checkbox" id="structure_{{structure.id}}">
+																				<span class="toggle">
+																					<span class="switch"></span>
+																				</span>
+																				<span class="label">Members_write</span>
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-6">
+																		<div class="my-3">
+																			<label class="toggle-switchy" for="structure_{{structure.id}}" data-size="sm" data-style="rounded" data-label="right">
+																				<input {{ structure.active ? 'checked=""' : '' }} {{structure.active ? '' : 'disabled' }} onclick="clickPermission({{structure.client.active}}, '{{structure.client.clientName}}')" type="checkbox" id="structure_{{structure.id}}">
+																				<span class="toggle">
+																					<span class="switch"></span>
+																				</span>
+																				<span class="label">Members_add</span>
+																			</label>
+																		</div>
+																	</div>
+																</div>-->
+								{{ form_end(form) }}
 							{% endif %}
 						{% endif %}
 					</div>
@@ -125,7 +159,6 @@
 	</div>
 	<script>
 		function clickFranchise(active, clientname) {
-console.log(active);
 if (active === 0) {
 if (confirm('Etes-vous sûr de vouloir activer l\'intégration de ' + clientname + ' à TOUS LES CLUBS ?')) {
 document.getElementById('franchiseForm').submit();
@@ -141,7 +174,21 @@ location.reload();
 }
 }
 
-function clickStructure(active, clientname) { // TODO
+function clickStructure(active, clientname, installId) {
+
+if (active) {
+if (confirm('Etes-vous sûr de vouloir activer l\'intégration de ' + clientname + ' à ' + installId + ' ?')) {
+document.getElementById('structureForm').submit();
+} else {
+location.reload();
+}
+} else {
+if (confirm('Etes-vous sûr de vouloir désactiver l\'intégration de ' + clientname + ' à ' + installId + ' ?')) {
+document.getElementById('structureForm').submit();
+} else {
+location.reload();
+}
+}
 }
 	</script>
 {% endblock %}
