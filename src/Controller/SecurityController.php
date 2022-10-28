@@ -44,6 +44,8 @@ class SecurityController extends AbstractController
             //On vérifie que l'utilisateur existe et n'a pas encore activé son compte
             if ($user && !$user->isActive()) {
                 $user->setIsActive(true);
+                $user->getClient()->setActive("1");
+                $em->flush($user->getClient());
                 $em->flush($user);
                 $this->addFlash('success', 'Utilisateur activé');
                 return $this->redirectToRoute('app_login');
