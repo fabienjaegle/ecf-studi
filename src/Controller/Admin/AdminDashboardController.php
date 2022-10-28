@@ -93,6 +93,8 @@ class AdminDashboardController extends AbstractController
             $entityManager->persist($franchise);
             $entityManager->flush();
 
+            //TODO: send Twig mail w/ link button on POST route 127.0.0.1:8000/verif/{token}
+            //for franchise account activation
             /*$sendMailService->send(
                 'no-reply@fj-fitness.fr',
                 $franchise->getEmail(),
@@ -226,6 +228,8 @@ class AdminDashboardController extends AbstractController
             $entityManager->persist($structure);
             $entityManager->flush();
 
+            //TODO: send Twig mail w/ link button on POST route 127.0.0.1:8000/verif/{token}
+            //for structure account activation
             /*$sendMailService->send(
                 'no-reply@fj-fitness.fr',
                 $franchise->getEmail(),
