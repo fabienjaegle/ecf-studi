@@ -33,27 +33,26 @@ class SecurityController extends AbstractController
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
-    #[Route('/verif/{token}', name: 'verify_user')]
+    #[Route('/verif/{token}', name: 'verify_user', methods: ['GET', 'POST'])]
     public function verifyUser($token, JWTService $jwt, UserRepository $userRepository, EntityManagerInterface $em): Response
     {
-        //On vérifie si le token est valide, n'a pas expiré et n'a pas été modifié
-        if ($jwt->isValid($token) && !$jwt->isExpired($token) && $jwt->check($token, $this->getParameter('app.jwtsecret'))) {
-            // On récupère le payload
-            $payload = $jwt->getPayload($token);
+        if ($jwt->isValid($token) && /*!$jwt->isExpired($token) &&*/ $jwt->check($token, $this->getParameter('app.jwtsecret'))) {
 
-            // On récupère le user du token
+            $payload = $jwt->getPayload($token);
             $user = $userRepository->find($payload['user_id']);
 
             //On vérifie que l'utilisateur existe et n'a pas encore activé son compte
             if ($user && !$user->isActive()) {
                 $user->setIsActive(true);
+                $user->getClient()->setActive("1");
+                $em->flush($user->getClient());
                 $em->flush($user);
                 $this->addFlash('success', 'Utilisateur activé');
-                return $this->redirectToRoute('profile_index');
+                return $this->redirectToRoute('app_login');
             }
         }
         // Ici un problème se pose dans le token
-        $this->addFlash('danger', 'Le token est invalide ou a expiré');
+        $this->addFlash('danger', 'Le token est invalide');
         return $this->redirectToRoute('app_login');
     }
 }

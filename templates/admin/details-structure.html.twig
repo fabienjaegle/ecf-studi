@@ -9,7 +9,6 @@
 		<div class="btn-toolbar mb-2 mb-md-0">
 			<div class="d-flex">
 				<a href="{{ path('app_dashboard_edit_structure', {'id': structure.id}) }}" class="btn btn-outline-primary">Modifier</a>
-				{{ include('structure/_delete_form.html.twig') }}
 			</div>
 		</div>
 	</div>
@@ -41,10 +40,13 @@
 					</div>
 				</div>
 				<div class="card-body d-flex">
-					<div class="form-check form-switch">
-						<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" {{ structure.client.active ? 'checked' : '' }} disabled>
-						<label class="form-check-label" for="flexSwitchCheckDefault">{{ structure.client.active ? 'Actif': 'Non actif' }}</label>
-					</div>
+					<label class="toggle-switchy" for="structure_{{structure.id}}" data-size="sm" data-style="rounded" data-label="right">
+						<input {{ structure.active ? 'checked=""' : '' }} disabled onclick="clickStructure({{structure.client.active}}, '{{structure.client.clientName}}')" type="checkbox" id="structure_{{structure.id}}">
+						<span class="toggle">
+							<span class="switch"></span>
+						</span>
+						<span class="label">{{ structure.client.active ? 'Actif': 'Non actif' }}</span>
+					</label>
 				</div>
 			</div>
 		</div>

@@ -39,20 +39,15 @@ class FranchiseRepository extends ServiceEntityRepository
         }
     }
 
-    public function getFranchises($value, $isActive = null): array
+    public function getActiveFranchises($value): array
     {
         $queryBuilder = $this->createQueryBuilder('f')
             ->orderBy('f.id', 'ASC')
+            ->andWhere('f.isActive = 1')
             ->andWhere('f.domain = :domain')
             ->setParameter('domain', $value);
 
-        if ($isActive) {
-            $queryBuilder->andWhere('f.isActive = :isActive')
-                ->setParameter('isActive', $isActive);
-        }
-
         return $queryBuilder
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult();
     }
@@ -66,7 +61,6 @@ class FranchiseRepository extends ServiceEntityRepository
             ->setParameter('domain', $value);
 
         return $queryBuilder
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult();
     }

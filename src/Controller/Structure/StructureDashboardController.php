@@ -47,14 +47,4 @@ class StructureDashboardController extends AbstractController
             'form' => $form,
         ]);
     }
-
-    #[Route('/dashboard/structure/{id}', name: 'app_dashboard_delete_structure', methods: ['POST'])]
-    public function delete(Request $request, Structure $structure, StructureRepository $structureRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete' . $structure->getId(), $request->request->get('_token'))) {
-            $structureRepository->remove($structure, true);
-        }
-
-        return $this->redirectToRoute('app_dashboard_structure_index', [], Response::HTTP_SEE_OTHER);
-    }
 }

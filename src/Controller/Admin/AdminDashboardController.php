@@ -9,6 +9,7 @@ use App\Entity\ApiInstallPerm;
 use App\Entity\Franchise;
 use App\Entity\Structure;
 use App\Form\ApiClientsGrantsType;
+use App\Form\ApiInstallPermType;
 use App\Form\FranchiseEditType;
 use App\Form\FranchiseType;
 use App\Form\StructureType;
@@ -38,15 +39,6 @@ class AdminDashboardController extends AbstractController
         $this->security = $security;
     }
 
-    function GUID()
-    {
-        if (function_exists('com_create_guid') === true) {
-            return trim(com_create_guid(), '{}');
-        }
-
-        return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
-    }
-
     #[Route('/dashboard/admin', name: 'app_dashboard_admin_index')]
     public function index(): Response
     {
@@ -61,7 +53,6 @@ class AdminDashboardController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $franchise->getClient()->setClientId($this->Guid());
             $franchise->getClient()->setClientName($franchise->getName());
             $franchise->getClient()->setActive("0");
 
@@ -84,30 +75,34 @@ class AdminDashboardController extends AbstractController
                 $franchise->setDomain($this->security->getUser());
             }
 
+            $franchise->getClient()->setClientId(""); //Temporary not nullable
             $franchiseRepository->add($franchise, true);
 
-            // On génère le JWT de l'utilisateur
-            // On crée le Header
+            // JWT Token generation
             $header = [
                 'typ' => 'JWT',
                 'alg' => 'HS256'
             ];
 
-            // On crée le Payload
             $payload = [
                 'user_id' => $franchise->getId()
             ];
 
-            // On génère le token
             $token = $jWTService->generate($header, $payload, $this->getParameter('app.jwtsecret'));
 
-            $sendMailService->send(
+            $franchise->getClient()->setClientId($token);
+            $entityManager->persist($franchise);
+            $entityManager->flush();
+
+            //TODO: send Twig mail w/ link button on POST route 127.0.0.1:8000/verif/{token}
+            //for franchise account activation
+            /*$sendMailService->send(
                 'no-reply@fj-fitness.fr',
                 $franchise->getEmail(),
                 'Activation de votre compte sur le site FJ Fitness',
                 'register',
                 compact('franchise', 'token')
-            );
+            );*/
 
             return $this->redirectToRoute('app_dashboard_admin_franchises_list', [], Response::HTTP_SEE_OTHER);
         }
@@ -131,14 +126,19 @@ class AdminDashboardController extends AbstractController
     }
 
     #[Route('/dashboard/admin/franchise/{id}', name: 'app_dashboard_admin_franchise_details', methods: ['GET'], requirements: ['id' => '\d+'])]
-    public function show_franchise(FranchiseRepository $franchiseRepository, StructureRepository $structureRepository, int $id): Response
+    public function show_franchise(Request $request, FranchiseRepository $franchiseRepository, StructureRepository $structureRepository, int $id): Response
     {
         $franchise = $franchiseRepository->find($id);
         $structures = $structureRepository->findDetails($franchise);
 
-        return $this->render('admin/details-franchise.html.twig', [
+        $perm = new ApiInstallPerm();
+        $form = $this->createForm(ApiInstallPermType::class, $perm);
+        $form->handleRequest($request);
+
+        return $this->renderForm('admin/details-franchise.html.twig', [
             'franchise' => $franchise,
-            'structures' => $structures
+            'structures' => $structures,
+            'form' => $form
         ]);
     }
 
@@ -177,7 +177,6 @@ class AdminDashboardController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $franchiseRepository->add($franchise, true);
 
-
             return $this->redirectToRoute('app_dashboard_admin_franchises_list', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -187,18 +186,8 @@ class AdminDashboardController extends AbstractController
         ]);
     }
 
-    #[Route('/dashboard/admin/franchise/{id}', name: 'app_dashboard_admin_delete_franchise', methods: ['POST'])]
-    public function delete_franchise(Request $request, Franchise $franchise, FranchiseRepository $franchiseRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete' . $franchise->getId(), $request->request->get('_token'))) {
-            $franchiseRepository->remove($franchise, true);
-        }
-
-        return $this->redirectToRoute('app_dashboard_franchise_index', [], Response::HTTP_SEE_OTHER);
-    }
-
     #[Route('/dashboard/admin/franchise/{id}/structure/new', name: 'app_dashboard_admin_new_structure', methods: ['GET', 'POST'])]
-    public function new_structure(Request $request, FranchiseRepository $franchiseRepository, StructureRepository $structureRepository, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, int $id): Response
+    public function new_structure(Request $request, JWTService $jWTService, SendMailService $sendMailService, FranchiseRepository $franchiseRepository, StructureRepository $structureRepository, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, int $id): Response
     {
         $franchise = $franchiseRepository->find($id);
 
@@ -207,7 +196,6 @@ class AdminDashboardController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $structure->getClient()->setClientId($this->Guid());
             $structure->getClient()->setClientName($structure->getName());
             $structure->getClient()->setActive("0");
 
@@ -224,8 +212,21 @@ class AdminDashboardController extends AbstractController
 
             // Hashed client secret
             $structure->getClient()->setClientSecret($structure->getPassword());
-
+            $structure->getClient()->setClientId(""); //Temporary not nullable
             $structureRepository->add($structure, true);
+
+            // JWT Token generation
+            $header = [
+                'typ' => 'JWT',
+                'alg' => 'HS256'
+            ];
+
+            $payload = [
+                'user_id' => $structure->getId()
+            ];
+
+            $token = $jWTService->generate($header, $payload, $this->getParameter('app.jwtsecret'));
+            $structure->getClient()->setClientId($token);
 
             // Set the franchise
             $structure->setFranchise($franchise);
@@ -233,23 +234,15 @@ class AdminDashboardController extends AbstractController
             $entityManager->persist($structure);
             $entityManager->flush();
 
-            /*$apiInstallPerms = new ApiInstallPerm();
-            $apiInstallPerms->setBranchId($structure->getId());
-            $apiInstallPerms->setInstallId($franchise->getDomain()->getId());
-            $apiInstallPerms->setClientGrants($apiClientGrants);
-            $apiInstallPerms->setMembersAdd(true);
-            $apiInstallPerms->setMembersRead(true);
-            $apiInstallPerms->setMembersWrite(true);
-            $apiInstallPerms->setMembersPaymentSchedulesRead(true);
-            $apiInstallPerms->setMembersProductsAdd(true);
-            $apiInstallPerms->setMembersStatistiquesRead(true);
-            $apiInstallPerms->setMembersSubscriptionRead(true);
-            $apiInstallPerms->setPaymentDayRead(true);
-            $apiInstallPerms->setPaymentSchedulesRead(true);
-            $apiInstallPerms->setPaymentSchedulesWrite(true);
-
-            $entityManager->persist($apiInstallPerms);
-            $entityManager->flush();*/
+            //TODO: send Twig mail w/ link button on POST route 127.0.0.1:8000/verif/{token}
+            //for structure account activation
+            /*$sendMailService->send(
+                'no-reply@fj-fitness.fr',
+                $franchise->getEmail(),
+                'Activation de votre compte sur le site FJ Fitness',
+                'register',
+                compact('franchise', 'token')
+            );*/
 
             return $this->redirectToRoute('app_dashboard_admin_franchise_details', ['id' => $id], Response::HTTP_SEE_OTHER);
         }
@@ -342,7 +335,7 @@ class AdminDashboardController extends AbstractController
     {
         $domain = $this->security->getUser();
 
-        $franchises = $franchiseRepository->getFranchises($domain, true);
+        $franchises = $franchiseRepository->getActiveFranchises($domain);
 
         if ($domain instanceof Admin) {
             return $this->render('admin/franchises-list.html.twig', [
@@ -356,12 +349,38 @@ class AdminDashboardController extends AbstractController
     {
         $domain = $this->security->getUser();
 
-        $franchises = $franchiseRepository->getFranchises($domain, false);
+        $franchises = $franchiseRepository->getInactiveFranchises($domain);
 
         if ($domain instanceof Admin) {
             return $this->render('admin/franchises-list.html.twig', [
                 'franchises' => $franchises
             ]);
         }
+    }
+
+    #[Route('/dashboard/admin/franchise/{id}', name: 'app_dashboard_admin_franchise_setActive')]
+    public function active_franchise(FranchiseRepository $franchiseRepository, EntityManagerInterface $entityManager, int $id): Response
+    {
+        $franchise = $franchiseRepository->find($id);
+
+        $franchise->setIsActive(!$franchise->isActive());
+        $franchise->getClient()->setActive($franchise->isActive() ? '1' : '0');
+        $entityManager->persist($franchise);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_dashboard_admin_franchise_details', ['id' => $id]);
+    }
+
+    #[Route('/dashboard/admin/franchise/{id}/structure/{structure_id}', name: 'app_dashboard_admin_structure_setActive', requirements: ['id' => '\d+'])]
+    public function active_structure(StructureRepository $structureRepository, EntityManagerInterface $entityManager, int $id, int $structure_id): Response
+    {
+        $structure = $structureRepository->find($structure_id);
+
+        $structure->setIsActive(!$structure->isActive());
+        $structure->getClient()->setActive($structure->isActive() ? '1' : '0');
+        $entityManager->persist($structure);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_dashboard_admin_franchise_details', ['id' => $id]);
     }
 }

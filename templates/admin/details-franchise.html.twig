@@ -27,10 +27,15 @@
 				</div>
 			</div>
 			<div class="card-body d-flex">
-				<div class="form-check form-switch">
-					<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" {{ franchise.client.active ? 'checked' : '' }} disabled>
-					<label class="form-check-label" for="flexSwitchCheckDefault">{{ franchise.client.active ? 'Actif': 'Non actif' }}</label>
-				</div>
+				<form method="post" action="{{ path('app_dashboard_admin_franchise_setActive', {'id': franchise.id}) }}" id="franchiseForm">
+					<label class="toggle-switchy" for="franchise_{{franchise.id}}" data-size="sm" data-style="rounded" data-label="right">
+						<input {{ franchise.active ? 'checked=""' : '' }} onclick="clickFranchise({{franchise.client.active}}, '{{franchise.client.clientName}}')" type="checkbox" id="franchise_{{franchise.id}}">
+						<span class="toggle">
+							<span class="switch"></span>
+						</span>
+						<span class="label">{{ franchise.client.active ? 'Actif': 'Non actif' }}</span>
+					</label>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -39,21 +44,20 @@
 		<form role="search" id="nav-search-form" method="post" action="{{ path('app_dashboard_admin_search') }}">
 			<div class="d-flex justify-content-between">
 				<input class="form-control form-control-dark rounded-0 border-0" id="branch_id" name="branch_id" type="text" placeholder="branch_id" aria-label="Nom du client">
-				<div class="d-flex justify-content-between">
-					<a href="{{ path('app_dashboard_admin_franchise_details', {'id': franchise.id}) }}" {% if route_name == "app_dashboard_admin_franchise_details" %} class="active btn btn-outline-primary" {% else %} class="btn btn-outline-primary" {% endif %}>Toutes</a>
-				</div>
 			</div>
 			<div class="d-flex justify-content-between">
 				<div class="btn-group me-2">
-
 					<a href="{{ path('app_dashboard_admin_filter_active_structures', {'id': franchise.id}) }}" {% if route_name == "app_dashboard_admin_filter_active_structures" %} class="active btn btn-outline-primary" {% else %} class="btn btn-outline-primary" {% endif %}>Actif</a>
 					<a href="{{ path('app_dashboard_admin_filter_inactive_structures', {'id': franchise.id}) }}" {% if route_name == "app_dashboard_admin_filter_inactive_structures" %} class="active btn btn-outline-primary" {% else %} class="btn btn-outline-primary" {% endif %}>Non actif</a>
 				</div>
-				<a href="{{ path('app_dashboard_admin_new_structure', {'id': franchise.id}) }}" class="btn btn-primary">Ajouter</a>
+				<a href="{{ path('app_dashboard_admin_franchise_details', {'id': franchise.id}) }}" {% if route_name == "app_dashboard_admin_franchise_details" %} class="active btn btn-outline-primary" {% else %} class="btn btn-outline-primary" {% endif %}>Toutes</a>
 			</div>
 		</form>
 	</div>
 	<div class="row">
+		<div class="d-flex justify-content-end">
+			<a href="{{ path('app_dashboard_admin_new_structure', {'id': franchise.id}) }}" class="btn btn-primary">Ajouter</a>
+		</div>
 		{% for structure in structures %}
 			<div class="col-xl-12 col-sm-12 col-12 my-3">
 				<div class="card">
@@ -64,7 +68,7 @@
 							</div>
 							<div class="media-body text-right mx-3">
 								<p class="card-text">client_id:
-									<a href="{{ path('app_dashboard_admin_structure_details', {'id': franchise.id, 'structure_id': structure.id}) }}">{{ structure.client.clientId }}</a>
+									{{ structure.client.id }}
 								</p>
 								<p class="card-text">install_id:
 									{% if structure.client.grants %}
@@ -77,13 +81,20 @@
 										{{ structure.client.grants.branchId }}
 									{% endif %}
 								</p>
+
+								<a href="{{ path('app_dashboard_admin_structure_details', {'id': franchise.id, 'structure_id': structure.id}) }}">Plus d'information</a>
 							</div>
 						</div>
 						<div class="media d-flex mt-3">
-							<div class="form-check form-switch">
-								<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" {{ structure.client.active ? 'checked' : '' }} disabled>
-								<label class="form-check-label" for="flexSwitchCheckDefault">{{ structure.client.active ? 'Actif': 'Non actif' }}</label>
-							</div>
+							<form method="post" action="{{ path('app_dashboard_admin_structure_setActive', {'id': franchise.id, 'structure_id': structure.id}) }}" id="structureForm">
+								<label class="toggle-switchy" for="structure_{{structure.id}}" data-size="sm" data-style="rounded" data-label="right">
+									<input {{ structure.active ? 'checked=""' : '' }} {{franchise.active ? '' : 'disabled' }} onclick="clickStructure({{structure.client.active}}, '{{structure.client.clientName}}', {{franchise.client.grants}})" type="checkbox" id="structure_{{structure.id}}">
+									<span class="toggle">
+										<span class="switch"></span>
+									</span>
+									<span class="label">{{ structure.client.active ? 'Actif': 'Non actif' }}</span>
+								</label>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -96,21 +107,88 @@
 								<i class="fa fa-plus"></i>
 							</a>
 						</div>
-
 					</div>
 					<div class="collapse" id="permissions-collapse-{{ structure.id }}">
-
 						{% if structure.client.grants %}
 							TODO Les permissions
 						{% else %}
-							<a href="{{ path('app_dashboard_admin_structure_add_permissions', {'id': structure.id, 'client_id': structure.client.id}) }}" class="btn btn-outline-primary">Ajouter</a>
+							{% if franchise.active %}
+								{{ form_start(form) }}
+								<!--<div class="row">
+																	<div class="col-6">
+																		<div class="my-3">
+																			<label class="toggle-switchy" for="structure_{{structure.id}}" data-size="sm" data-style="rounded" data-label="right">
+																				<input {{ structure.active ? 'checked=""' : '' }} {{structure.active ? '' : 'disabled' }} onclick="clickPermission({{structure.client.active}}, '{{structure.client.clientName}}')" type="checkbox" id="structure_{{structure.id}}">
+																				<span class="toggle">
+																					<span class="switch"></span>
+																				</span>
+																				<span class="label">Members_read</span>
+																			</label>
+																		</div>
+																		<div>
+																			<label class="toggle-switchy" for="structure_{{structure.id}}" data-size="sm" data-style="rounded" data-label="right">
+																				<input {{ structure.active ? 'checked=""' : '' }} {{structure.active ? '' : 'disabled' }} onclick="clickPermission({{structure.client.active}}, '{{structure.client.clientName}}')" type="checkbox" id="structure_{{structure.id}}">
+																				<span class="toggle">
+																					<span class="switch"></span>
+																				</span>
+																				<span class="label">Members_write</span>
+																			</label>
+																		</div>
+																	</div>
+																	<div class="col-6">
+																		<div class="my-3">
+																			<label class="toggle-switchy" for="structure_{{structure.id}}" data-size="sm" data-style="rounded" data-label="right">
+																				<input {{ structure.active ? 'checked=""' : '' }} {{structure.active ? '' : 'disabled' }} onclick="clickPermission({{structure.client.active}}, '{{structure.client.clientName}}')" type="checkbox" id="structure_{{structure.id}}">
+																				<span class="toggle">
+																					<span class="switch"></span>
+																				</span>
+																				<span class="label">Members_add</span>
+																			</label>
+																		</div>
+																	</div>
+																</div>-->
+								{{ form_end(form) }}
+							{% endif %}
 						{% endif %}
-
 					</div>
 				</div>
 			</div>
 		{% else %}
-			<p>Aucune structure associée pour le moment.</p>
+			<p>Aucune structure associée à la franchise pour le moment.</p>
 		{% endfor %}
 	</div>
+	<script>
+		function clickFranchise(active, clientname) {
+if (active === 0) {
+if (confirm('Etes-vous sûr de vouloir activer l\'intégration de ' + clientname + ' à TOUS LES CLUBS ?')) {
+document.getElementById('franchiseForm').submit();
+} else {
+location.reload();
+}
+} else {
+if (confirm('Etes-vous sûr de vouloir désactiver l\'intégration de ' + clientname + ' à TOUS LES CLUBS ?')) {
+document.getElementById('franchiseForm').submit();
+} else {
+location.reload();
+}
+}
+}
+
+function clickStructure(active, clientname, installId) {
+
+if (active) {
+if (confirm('Etes-vous sûr de vouloir activer l\'intégration de ' + clientname + ' à ' + installId + ' ?')) {
+document.getElementById('structureForm').submit();
+} else {
+location.reload();
+}
+} else {
+if (confirm('Etes-vous sûr de vouloir désactiver l\'intégration de ' + clientname + ' à ' + installId + ' ?')) {
+document.getElementById('structureForm').submit();
+} else {
+location.reload();
+}
+}
+}
+	</script>
 {% endblock %}

@@ -3,8 +3,6 @@
 namespace App\Form;
 
 use App\Entity\ApiInstallPerm;
-use Doctrine\DBAL\Types\BooleanType;
-use EasyCorp\Bundle\EasyAdminBundle\Form\Filter\Type\BooleanFilterType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;

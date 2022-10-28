@@ -9,11 +9,6 @@
 		<div class="btn-toolbar mb-2 mb-md-0">
 			<div class="btn-group me-2">
 				<a href="{{ path('app_dashboard_admin_franchise_details', {'id': franchise.id}) }}" role="button" class="btn btn-outline-success mt-2">Retour</a>
-
-				<form method="post" action="{{ path('app_dashboard_admin_delete_franchise', {'id': franchise.id}) }}" onsubmit="return confirm('Etes-vous sûr de vouloir supprimer cette franchise ainsi que toutes les structures associées ?');">
-					<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ franchise.id) }}">
-					<button class="btn btn-outline-danger mt-2">Supprimer</button>
-				</form>
 			</div>
 		</div>
 	</div>
