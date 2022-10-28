@@ -16,7 +16,12 @@
 
 Après avoir cloné le projet, ouvrir le projet via Visual Studio Code par exemple et lancer un terminal, puis taper la commande `composer install` pour installer toutes les dépendances du projet.
 
-Changer les variables contenues dans le fichier `.env` à la racine du projet pour ce qui concerne l'accès à la base de données.
+Changer les variables contenues dans le fichier `.env` à la racine du projet pour ce qui concerne l'accès à la base de données ainsi qu'au mail DSN pour l'envoi d'emails :
+
+```
+DATABASE_URL=...
+MAILER_DSN=
+```
 
 ### Exécution
 
